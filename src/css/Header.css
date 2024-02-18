@@ -1,0 +1,32 @@
+.header {
+    background: #001529;
+    padding: 0;
+}
+
+.app-name {
+    color: #f8f9fa;
+    margin-right: 20px;
+}
+
+.app-slogan {
+    color: #6c757d;
+    margin-bottom: 10px;
+}
+
+.menu {
+    line-height: 64px;
+}
+
+@media (max-width: 576px) {
+    .header {
+        padding: 0 20px;
+    }
+
+    .app-name {
+        font-size: 18px;
+    }
+
+    .app-slogan {
+        font-size: 12px;
+    }
+}
