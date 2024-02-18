@@ -26,7 +26,6 @@ const fetchFoodItemData = async (setFoodItem, setLoading, foodId, token) => {
 };
 
 
-
 export default function ReserveFoodItems() {
     const [foodItem, setFoodItem] = useState(null);
     const [loading, setLoading] = useState(true);
@@ -39,9 +38,26 @@ export default function ReserveFoodItems() {
 
     const defaultImageUrl = "https://via.placeholder.com/150";
 
-    const onFinish = (values) => {
-        console.log('Received values of form: ', values);
-        // handle reserve food item endpoint
+    const onFinish = async (values) => {
+        try {
+            const response = await axios.post(`${process.env.REACT_APP_BACKEND_URL}/collection/`, {
+                quantity: values.quantity,
+                food_item: foodId,
+            }, {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            });
+            if (process.env.NODE_ENV === 'development') {
+                console.log('Response:', response.data);
+            }
+            message.success('Food item reserved successfully');
+        } catch (error) {
+            if (process.env.NODE_ENV === 'development') {
+                console.error('Error reserving food item:', error);
+            }
+            message.error('Failed to reserve food item. Please try again.');
+        }
     };
 
     return (
@@ -77,7 +93,7 @@ export default function ReserveFoodItems() {
                     </Form.Item>
                     <Form.Item>
                         <Button type="primary" htmlType="submit">
-                            Update
+                            Reserve
                         </Button>
                     </Form.Item>
                 </Form>
