@@ -1,6 +1,7 @@
 import React from 'react';
 import {Card, Space, Typography, Button} from 'antd';
 import PropTypes from 'prop-types';
+import {Link} from 'react-router-dom';
 
 const {Text} = Typography;
 
@@ -44,7 +45,10 @@ function FoodItemCard({foodItem}) {
             cover={renderImage(foodItem, defaultImageUrl)}
             style={cardStyle}
             actions={[
-                <Button type="primary" style={{width: '100%'}}>Add to Collection</Button>
+                // <Button type="primary" style={{width: '100%'}}>Add to Collection</Button>
+                <Link to={`/reserveFoodItems?id=${foodItem.id}`}>
+                    <Button type="primary" style={{width: '100%'}}>Add to Collection</Button>
+                </Link>
             ]}
         >
             {renderTextFields(foodItem)}

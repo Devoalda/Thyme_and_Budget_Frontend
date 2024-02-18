@@ -8,6 +8,7 @@ import Error from './pages/Error';
 import Logout from './pages/Logout';
 import MyFoodItems from './pages/MyFoodItems';
 import NewFoodItem from './pages/NewFoodItem';
+import ReserveFoodItems from './pages/ReserveFoodItems';
 
 function App() {
     return (<Router>
@@ -15,6 +16,7 @@ function App() {
                 <Route path="/" element={<Registration/>}/>
                 <Route path="/myfooditems" element={<MyFoodItems/>}/>
                 <Route path="/newfooditem" element={<NewFoodItem/>}/>
+                <Route path="/reservefooditems" element={<ReserveFoodItems/>}/>
                 <Route path="/login" element={<Login/>}/>
                 <Route path="/logout" element={<Logout/>}/>
                 <Route
