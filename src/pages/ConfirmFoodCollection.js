@@ -46,29 +46,38 @@ const fetchFoodItemData = async (id, token) => {
     }
 };
 
-// Function to confirm collection
-const confirmCollection = async (record, token) => {
-    try {
-        await axios.put(`${process.env.REACT_APP_BACKEND_URL}/collection/${record.id}/`, {
-            quantity: 0,
-        }, {
-            headers: {
-                Authorization: `Bearer ${token}`,
-            },
-        });
-        message.success('Food item collected successfully');
-    } catch (error) {
-        if (process.env.NODE_ENV === 'development') {
-            console.error('Error confirming collection:', error);
-        }
-        message.error('Failed to confirm collection. Please try again.');
-    }
-};
-
 export default function ConfirmFoodCollection() {
     const [reservedFoodItems, setReservedFoodItems] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [collectedItems, setCollectedItems] = useState([]); // New state variable
     const token = localStorage.getItem('token');
+
+    const confirmCollection = async (record, token) => {
+        try {
+            const requestData = {
+                quantity: 0,
+                phone_number: record.phone_number,
+                food_item: record.food_item,
+            };
+            console.log('Request data:', requestData); // Log the request data
+
+            const response = await axios.put(`${process.env.REACT_APP_BACKEND_URL}/collection/${record.id}/`, requestData, {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            });
+
+            console.log('Response:', response); // Log the response
+
+            message.success('Food item collected successfully');
+            setCollectedItems([...collectedItems, record.id]); // Add the collected item's id to the state
+        } catch (error) {
+            if (process.env.NODE_ENV === 'development') {
+                console.error('Error confirming collection:', error);
+            }
+            message.error('Failed to confirm collection. Please try again.');
+        }
+    };
 
     useEffect(() => {
         fetchReservedFoodItems(setReservedFoodItems, setLoading, token);
@@ -80,15 +89,6 @@ export default function ConfirmFoodCollection() {
             dataIndex: ['foodItemData', 'name'],
             key: 'food_item',
         },
-        // {
-        //     title: 'Image',
-        //     dataIndex: ['foodItemData', 'image'],
-        //     key: 'image',
-        //     render: (image, record) => {
-        //         console.log(image); // Log the image URL to the console
-        //         return image ? <img src={image} alt={record.foodItemData.name} style={{ width: '50px', height: '50px' }} /> : 'No Image';
-        //     },
-        // },
         {
             title: 'Expiry Date',
             dataIndex: ['foodItemData', 'expiry_date'],
@@ -108,7 +108,9 @@ export default function ConfirmFoodCollection() {
             title: 'Action',
             key: 'action',
             render: (text, record) => (
-                <Button onClick={() => confirmCollection(record, token)}>Confirm Collection</Button>
+                collectedItems.includes(record.id) || record.quantity === 0 ? // Check if the item has been collected or quantity is 0
+                    <span style={{color: 'green'}}>Collected</span> : // If yes, show "Collected"
+                    <Button onClick={() => confirmCollection(record, token)}>Confirm Collection</Button> // If no, show the button
             ),
         },
     ];
