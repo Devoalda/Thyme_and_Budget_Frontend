@@ -9,6 +9,7 @@ import Logout from './pages/Logout';
 import MyFoodItems from './pages/MyFoodItems';
 import NewFoodItem from './pages/NewFoodItem';
 import ReserveFoodItems from './pages/ReserveFoodItems';
+import ConfirmFoodCollection from './pages/ConfirmFoodCollection';
 
 function App() {
     return (<Router>
@@ -17,6 +18,7 @@ function App() {
                 <Route path="/myfooditems" element={<MyFoodItems/>}/>
                 <Route path="/newfooditem" element={<NewFoodItem/>}/>
                 <Route path="/reservefooditems" element={<ReserveFoodItems/>}/>
+                <Route path="/confirmfoodcollection" element={<ConfirmFoodCollection/>}/>
                 <Route path="/login" element={<Login/>}/>
                 <Route path="/logout" element={<Logout/>}/>
                 <Route
