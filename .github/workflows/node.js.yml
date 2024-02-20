@@ -28,6 +28,10 @@ jobs:
         cache: 'npm'
       env:
         REACT_APP_BACKEND_URL: ${{ secrets.BACKEND_URL }}
+    - name: clean cache
+      run: npm cache clean --force
+    - name: install
+      run: npm ci
     - name: build
       env:
        CI: false
