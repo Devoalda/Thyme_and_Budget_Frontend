@@ -28,6 +28,9 @@ export default function Header() {
             <Item key="/newfooditem">
                 <Link to="/newfooditem">New Food Item</Link>
             </Item>
+            <Item key="/profile">
+                <Link to="/profile">Profile</Link>
+            </Item>
             <Item key="/logout">
                 <Link to="/logout">Logout</Link>
             </Item>

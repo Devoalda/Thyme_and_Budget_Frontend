@@ -6,6 +6,7 @@ import Login from './pages/Login';
 import Home from './pages/Home';
 import Error from './pages/Error';
 import Logout from './pages/Logout';
+import MyProfile from './pages/Profile';
 import MyFoodItems from './pages/MyFoodItems';
 import NewFoodItem from './pages/NewFoodItem';
 import ReserveFoodItems from './pages/ReserveFoodItems';
@@ -17,6 +18,7 @@ function App() {
                 <Route path="/myfooditems" element={<MyFoodItems/>}/>
                 <Route path="/newfooditem" element={<NewFoodItem/>}/>
                 <Route path="/reservefooditems" element={<ReserveFoodItems/>}/>
+                <Route path="/profile" element={<MyProfile/>}/>
                 <Route path="/login" element={<Login/>}/>
                 <Route path="/logout" element={<Logout/>}/>
                 <Route
