@@ -30,10 +30,9 @@ jobs:
         CI: false
         REACT_APP_BACKEND_URL: ${{ secrets.BACKEND_URL }}
     - run: npm ci
-    - run: npm run build --if-present     
+    - run: npm run build --if-present
     - name: Send files to S3
-    - uses: actions/checkout@master
-    - uses: jakejarvis/s3-sync-action@master
+      uses: jakejarvis/s3-sync-action@master
       with:
         args: --acl public-read --follow-symlinks --delete
       env:
