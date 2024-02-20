@@ -23,6 +23,7 @@ const postFoodItem = async (values, base64Image) => {
         name: values.name,
         expiry_date: values.expiry_date.format('YYYY-MM-DD'),
         quantity: values.quantity,
+        postal_code: values.postal_code,
         image: base64Image,
     }, {
         headers: {
@@ -94,6 +95,11 @@ const NewFoodItem = () => {
                         <Form.Item name="quantity" rules={[{required: true, message: 'Please input the quantity!'}]}>
                             <Input type="number" placeholder="Quantity"/>
                         </Form.Item>
+
+                        <Form.Item name="postal_code" rules={[{required: true, message: 'Please input the location!'}]}>
+                            <Input type="text" placeholder="Collection Postal Code"/>
+                        </Form.Item>
+
                         <Form.Item name="image" rules={[{required: true, message: 'Please upload an image!'}]}>
                             <Upload
                                 name="image"

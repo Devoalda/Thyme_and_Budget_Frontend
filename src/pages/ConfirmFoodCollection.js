@@ -6,7 +6,7 @@ import LayoutComponent from '../components/Layout';
 // Function to fetch reserved food items
 const fetchReservedFoodItems = async (setReservedFoodItems, setLoading, token) => {
     try {
-        const response = await axios.get(`http://127.0.0.1:8000/collection/`, {
+        const response = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/collection/`, {
             headers: {
                 Authorization: `Bearer ${token}`,
             },
@@ -32,7 +32,7 @@ const fetchReservedFoodItems = async (setReservedFoodItems, setLoading, token) =
 // Function to fetch food item data
 const fetchFoodItemData = async (id, token) => {
     try {
-        const response = await axios.get(`http://127.0.0.1:8000/food/${id}/`, {
+        const response = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/food-items/${id}/`, {
             headers: {
                 Authorization: `Bearer ${token}`,
             },

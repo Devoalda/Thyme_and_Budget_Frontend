@@ -29,6 +29,9 @@ const fetchFoodData = async (setFoodItems, setLoading, token) => {
 
 // Function to render food items
 const renderFoodItems = (foodItems) => {
+    if (process.env.NODE_ENV === 'development') {
+        console.log('Food item:', foodItems);
+    }
     return foodItems.map((foodItem, index) => (<Col key={index} span={8}>
         <FoodItemCard foodItem={foodItem}/>
     </Col>));

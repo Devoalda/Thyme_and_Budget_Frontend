@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {Button, Col, message, Row, Spin, Typography} from 'antd';
+import {Col, message, Row, Spin, Typography} from 'antd';
 import axios from "axios";
 import {useNavigate} from 'react-router-dom';
 import FoodItemCard from "../components/FoodItemCard";
@@ -10,11 +10,15 @@ const {Title} = Typography;
 // Function to fetch food data
 const fetchFoodData = async (setFood, setLoading, token) => {
     try {
-        const response = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/food/`, {
+        console.log('Token:', token); // Add this line
+
+        const config = token ? {
             headers: {
                 Authorization: `Bearer ${token}`,
             },
-        });
+        } : {};
+
+        const response = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/food/`, config);
         if (process.env.NODE_ENV === 'development') {
             console.log('Response:', response.data);
         }
@@ -33,11 +37,9 @@ const fetchFoodData = async (setFood, setLoading, token) => {
 
 // Function to render food items
 const renderFoodItems = (food) => {
-    return food.map((item, index) => (
-        <Col key={index} span={8}>
-            <FoodItemCard foodItem={item}/>
-        </Col>
-    ));
+    return food.map((item, index) => (<Col key={index} span={8}>
+        <FoodItemCard foodItem={item}/>
+    </Col>));
 };
 
 // Main function
@@ -59,16 +61,10 @@ export default function Home() {
         fetchFoodData(setFood, setLoading, token);
     }, []);
 
-    return (
-        <div>
-            <Title level={2} style={{textAlign: 'center'}}>Thyme and Budget Food Items</Title>
-            <Row gutter={16}>
-                {loading ? (
-                    <Spin />
-                ) : food.length > 0 ? renderFoodItems(food) : (
-                    <NoFoodItemCard />
-                )}
-            </Row>
-        </div>
-    );
+    return (<div>
+        <Title level={2} style={{textAlign: 'center'}}>Thyme and Budget Food Items</Title>
+        <Row gutter={16}>
+            {loading ? (<Spin/>) : food.length > 0 ? renderFoodItems(food) : (<NoFoodItemCard/>)}
+        </Row>
+    </div>);
 }
