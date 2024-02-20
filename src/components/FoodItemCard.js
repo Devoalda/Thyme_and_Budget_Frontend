@@ -47,7 +47,7 @@ function FoodItemCard({foodItem}) {
             actions={[
                 // <Button type="primary" style={{width: '100%'}}>Add to Collection</Button>
                 <Link to={`/reserveFoodItems?id=${foodItem.id}`}>
-                    <Button type="primary" style={{width: '100%'}}>Add to Collection</Button>
+                    <Button type="primary" style={{width: '100%'}}>Reserve Food</Button>
                 </Link>
             ]}
         >
