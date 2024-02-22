@@ -56,7 +56,11 @@ export default function ReserveFoodItems() {
             if (process.env.NODE_ENV === 'development') {
                 console.error('Error reserving food item:', error);
             }
-            message.error('Failed to reserve food item. Please try again.');
+            if (error.response && error.response.status === 400) {
+                for (const [key, value] of Object.entries(error.response.data)) {
+                    message.error(`${key}: ${value}`);
+                }
+            }
         }
     };
 
