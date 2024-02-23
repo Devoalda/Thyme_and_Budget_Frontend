@@ -48,6 +48,20 @@ const MyProfile = () => {
             navigate('/login');
             return;
         }
+        // Send get request to /user/status/ with the token
+        axios.get(`${process.env.REACT_APP_BACKEND_URL || 'http://localhost:8000'}/user/status/`, {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        })
+            .then(statusResponse  => {
+                console.log(statusResponse.data.role);
+            })
+            .catch(statusError  => {
+                // Handle error
+                console.error('Error getting user status:', statusError);
+                navigate('/login');
+            });
 
         axios.get(`${process.env.REACT_APP_BACKEND_URL || 'http://127.0.0.1:8000'}/user/`, {
             headers: {

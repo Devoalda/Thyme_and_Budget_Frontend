@@ -51,6 +51,7 @@ export default function ConfirmFoodCollection() {
     const [reservedFoodItems, setReservedFoodItems] = useState([]);
     const [loading, setLoading] = useState(true);
     const [collectedItems, setCollectedItems] = useState([]); // New state variable
+    const [role, setRole] = useState('');
     const token = localStorage.getItem('token');
     const navigate = useNavigate();
 
@@ -82,11 +83,23 @@ export default function ConfirmFoodCollection() {
     };
 
     useEffect(() => {
-        if (localStorage.getItem('role') !== 'admin') {
-            // Redirect to login page if user is not admin
-            navigate('/login');
-            return;
-        }
+        // Send get request to /user/status/ with the token
+        axios.get(`${process.env.REACT_APP_BACKEND_URL || 'http://localhost:8000'}/user/status/`, {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        })
+            .then(statusResponse  => {
+                console.log(statusResponse.data.role);
+                if (statusResponse.data.role !== 'superuser') {
+                    navigate('/home');
+                }
+            })
+            .catch(statusError  => {
+                // Handle error
+                console.error('Error getting user status:', statusError);
+                navigate('/login');
+            });
         fetchReservedFoodItems(setReservedFoodItems, setLoading, token);
     }, [token]);
 
