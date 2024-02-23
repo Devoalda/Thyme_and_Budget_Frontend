@@ -14,10 +14,10 @@ const fetchReservedFoodItems = async (setReservedFoodItems, setLoading, token) =
 
         const foodItemsData = await Promise.all(response.data.map(async (item) => {
             const foodItemData = await fetchFoodItemData(item.food_item, token);
-            console.log(foodItemData);
             return { ...item, foodItemData };
         }));
-
+        //log response
+        console.log('Response:', response.data);
         setReservedFoodItems(foodItemsData);
     } catch (error) {
         if (process.env.NODE_ENV === 'development') {
@@ -32,7 +32,7 @@ const fetchReservedFoodItems = async (setReservedFoodItems, setLoading, token) =
 // Function to fetch food item data
 const fetchFoodItemData = async (id, token) => {
     try {
-        const response = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/food-items/${id}/`, {
+        const response = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/food/${id}/`, {
             headers: {
                 Authorization: `Bearer ${token}`,
             },
