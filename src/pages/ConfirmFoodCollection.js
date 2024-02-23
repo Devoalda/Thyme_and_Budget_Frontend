@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { message, Spin, Table, Button } from 'antd';
 import axios from 'axios';
 import LayoutComponent from '../components/Layout';
+import { useNavigate } from 'react-router-dom';
 
 // Function to fetch reserved food items
 const fetchReservedFoodItems = async (setReservedFoodItems, setLoading, token) => {
@@ -51,6 +52,7 @@ export default function ConfirmFoodCollection() {
     const [loading, setLoading] = useState(true);
     const [collectedItems, setCollectedItems] = useState([]); // New state variable
     const token = localStorage.getItem('token');
+    const navigate = useNavigate();
 
     const confirmCollection = async (record, token) => {
         try {
@@ -80,6 +82,11 @@ export default function ConfirmFoodCollection() {
     };
 
     useEffect(() => {
+        if (localStorage.getItem('role') !== 'admin') {
+            // Redirect to login page if user is not admin
+            navigate('/login');
+            return;
+        }
         fetchReservedFoodItems(setReservedFoodItems, setLoading, token);
     }, [token]);
 

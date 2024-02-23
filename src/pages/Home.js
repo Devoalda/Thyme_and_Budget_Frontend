@@ -58,6 +58,12 @@ export default function Home() {
     }
 
     useEffect(() => {
+        // Check if token is present
+        if (!token) {
+            // Redirect to login page if token is not present
+            navigate('/login');
+            return;
+        }
         fetchFoodData(setFood, setLoading, token);
     }, []);
 

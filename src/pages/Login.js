@@ -26,8 +26,18 @@ const Login = () => {
                 if (process.env.NODE_ENV === 'development') {
                     localStorage.setItem('role', response.data.authenticatedUser.role);
                 }
-                // Redirect to home page
-                navigate('/home');
+                //log response
+                //console.log(response.data.authenticatedUser.username);
+                if (response.data.authenticatedUser.username == 'admin') {
+                    localStorage.setItem('role', 'admin');
+                    // Redirect to admin landing page
+                    //navigate('/admin');
+                }
+                else{
+                    // Redirect to user landing page
+                    navigate('/home');
+                }
+                
             })
             .catch(error => {
                 // Handle error

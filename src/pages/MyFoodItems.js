@@ -47,6 +47,12 @@ export default function MyFoodItems() {
     const token = localStorage.getItem('token');
 
     useEffect(() => {
+        // Check if token is present
+        if (!token) {
+            // Redirect to login page if token is not present
+            navigate('/login');
+            return;
+        }
         fetchFoodData(setFoodItems, setLoading, token);
     }, []);
 

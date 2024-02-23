@@ -42,6 +42,13 @@ const MyProfile = () => {
     const token = localStorage.getItem('token');
 
     useEffect(() => {
+        // Check if token is present
+        if (!token) {
+            // Redirect to login page if token is not present
+            navigate('/login');
+            return;
+        }
+
         axios.get(`${process.env.REACT_APP_BACKEND_URL || 'http://127.0.0.1:8000'}/user/`, {
             headers: {
                 'Authorization': `Bearer ${token}`

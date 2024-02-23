@@ -1,4 +1,4 @@
-import React from 'react';
+import {React, useEffect} from 'react';
 import {Button, DatePicker, Form, Input, message, Space, Typography, Upload} from 'antd';
 import axios from 'axios';
 import {useNavigate} from 'react-router-dom';
@@ -51,6 +51,17 @@ const handleErrors = (error) => {
 // Main function
 const NewFoodItem = () => {
     const navigate = useNavigate();
+
+    useEffect(() => {
+        // Get token from local storage
+        const token = localStorage.getItem('token');
+
+        // Check if token is present
+        if (!token) {
+            // Redirect to login page if token is not present
+            navigate('/login');
+        }
+    }, [navigate]);
 
     const onFinish = async (values) => {
         try {
