@@ -84,15 +84,15 @@ const RegistrationForm = () => {
             });
 
             // If role is 'donor', send postal_code to /location endpoint
-            if (values.role === 'donor' && values.postal_code) {
-                const locationResponse = await axios.post(`${process.env.REACT_APP_BACKEND_URL || 'http://127.0.0.1:8000'}/location/`, {
-                    username: values.username, postal_code: values.postal_code,
-                });
-
-                if (process.env.NODE_ENV === 'development') {
-                    console.log(locationResponse);
-                }
-            }
+            // if (values.role === 'donor' && values.postal_code) {
+            //     const locationResponse = await axios.post(`${process.env.REACT_APP_BACKEND_URL || 'http://127.0.0.1:8000'}/location/`, {
+            //         username: values.username, postal_code: values.postal_code,
+            //     });
+            //
+            //     if (process.env.NODE_ENV === 'development') {
+            //         console.log(locationResponse);
+            //     }
+            // }
 
             message.success('Account created successfully! Redirecting to login page...');
             setTimeout(() => {
@@ -152,7 +152,7 @@ const RegistrationForm = () => {
                         <Option value="receiver">Receiver</Option>
                     </Select>)}
                     {getFormField("phone_number", "Phone Number", <Input/>)}
-                    {role === 'donor' && getFormField("postal_code", "Postal Code", <Input/>)}
+                    {/*{role === 'donor' && getFormField("postal_code", "Postal Code", <Input/>)}*/}
 
                     {getFormButton("primary", "submit", "Register")}
                 </Form>

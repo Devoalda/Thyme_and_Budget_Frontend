@@ -1,9 +1,9 @@
 import React, {useEffect, useState} from 'react';
-import {Col, message, Row, Spin, Typography} from 'antd';
+import {message, Spin, Typography} from 'antd';
 import axios from "axios";
 import {useNavigate} from 'react-router-dom';
-import FoodItemCard from "../components/FoodItemCard";
 import NoFoodItemCard from "../components/NoFoodItemCard";
+import {useRenderFoodItems} from "../components/CardHolder";
 
 const {Title} = Typography;
 
@@ -36,11 +36,11 @@ const fetchFoodData = async (setFood, setLoading, token) => {
 };
 
 // Function to render food items
-const renderFoodItems = (food) => {
-    return food.map((item, index) => (<Col key={index} span={8}>
-        <FoodItemCard foodItem={item}/>
-    </Col>));
-};
+// const renderFoodItems = (food) => {
+//     return food.map((item, index) => (<Col key={index} span={8}>
+//         <FoodItemCard foodItem={item}/>
+//     </Col>));
+// };
 
 // Main function
 export default function Home() {
@@ -81,10 +81,13 @@ export default function Home() {
         fetchFoodData(setFood, setLoading, token);
     }, []);
 
+    const renderedFoodItems = useRenderFoodItems(food);
+
     return (<div>
         <Title level={2} style={{textAlign: 'center'}}>Thyme and Budget Food Items</Title>
-        <Row gutter={16}>
-            {loading ? (<Spin/>) : food.length > 0 ? renderFoodItems(food) : (<NoFoodItemCard/>)}
-        </Row>
+        {/*<Row gutter={16}>*/}
+        {/*    {loading ? (<Spin/>) : food.length > 0 ? renderFoodItems(food) : (<NoFoodItemCard/>)}*/}
+        {/*</Row>*/}
+        {loading ? (<Spin/>) : food.length > 0 ? renderedFoodItems : (<NoFoodItemCard/>)}
     </div>);
 }

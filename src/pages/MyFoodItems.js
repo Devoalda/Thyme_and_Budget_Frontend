@@ -1,10 +1,10 @@
 import React, {useEffect, useState} from 'react';
-import {Col, message, Row, Spin, Typography} from 'antd';
+import { message, Spin, Typography} from 'antd';
 import axios from "axios";
 import {useNavigate} from 'react-router-dom';
 import LayoutComponent from '../components/Layout';
-import FoodItemCard from "../components/FoodItemCard";
 import NoFoodItemCard from "../components/NoFoodItemCard";
+import {useRenderFoodItems} from "../components/CardHolder";
 
 const {Title} = Typography;
 
@@ -28,14 +28,14 @@ const fetchFoodData = async (setFoodItems, setLoading, token) => {
 };
 
 // Function to render food items
-const renderFoodItems = (foodItems) => {
-    if (process.env.NODE_ENV === 'development') {
-        console.log('Food item:', foodItems);
-    }
-    return foodItems.map((foodItem, index) => (<Col key={index} span={8}>
-        <FoodItemCard foodItem={foodItem}/>
-    </Col>));
-};
+// const renderFoodItems = (foodItems) => {
+//     if (process.env.NODE_ENV === 'development') {
+//         console.log('Food item:', foodItems);
+//     }
+//     return foodItems.map((foodItem, index) => (<Col key={index} span={8}>
+//         <FoodItemCard foodItem={foodItem}/>
+//     </Col>));
+// };
 
 // Main function
 export default function MyFoodItems() {
@@ -70,12 +70,15 @@ export default function MyFoodItems() {
         fetchFoodData(setFoodItems, setLoading, token);
     }, []);
 
+    const renderedFoodItems = useRenderFoodItems(foodItems);
+
     return (<LayoutComponent>
         <div>
             <Title level={2} style={{textAlign: 'center'}}>My Food Items</Title>
-            <Row gutter={16}>
-                {loading ? (<Spin/>) : foodItems.length > 0 ? renderFoodItems(foodItems) : (<NoFoodItemCard/>)}
-            </Row>
+            {/*<Row gutter={16}>*/}
+            {/*    {loading ? (<Spin/>) : foodItems.length > 0 ? renderFoodItems(foodItems) : (<NoFoodItemCard/>)}*/}
+            {/*</Row>*/}
+            {loading ? (<Spin/>) : foodItems.length > 0 ? renderedFoodItems : (<NoFoodItemCard/>)}
         </div>
     </LayoutComponent>);
 }
