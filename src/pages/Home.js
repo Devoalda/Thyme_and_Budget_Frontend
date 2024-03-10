@@ -4,6 +4,10 @@ import axios from "axios";
 import {useNavigate} from 'react-router-dom';
 import FoodItemCard from "../components/FoodItemCard";
 import NoFoodItemCard from "../components/NoFoodItemCard";
+import config from '../chatbot/config.js';
+import MessageParser from '../chatbot/MessageParser.js';
+import ActionProvider from '../chatbot/ActionProvider.js';
+import Chatbot from "react-chatbot-kit";
 
 const {Title} = Typography;
 
@@ -86,5 +90,10 @@ export default function Home() {
         <Row gutter={16}>
             {loading ? (<Spin/>) : food.length > 0 ? renderFoodItems(food) : (<NoFoodItemCard/>)}
         </Row>
+        <Chatbot
+            config={config}
+            messageParser={MessageParser}
+            actionProvider={ActionProvider}
+        />
     </div>);
 }

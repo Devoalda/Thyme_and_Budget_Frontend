@@ -2,6 +2,11 @@ import React, {useState} from 'react';
 import {Button, Form, Input, message, Select, Space, Typography} from 'antd';
 import axios from "axios";
 import {useNavigate} from 'react-router-dom';
+import config from '../chatbot/config.js';
+import MessageParser from '../chatbot/MessageParser.js';
+import ActionProvider from '../chatbot/ActionProvider.js';
+import Chatbot from "react-chatbot-kit";
+import '../css/chat.css';
 
 const {Option} = Select;
 const {Title, Text} = Typography;
@@ -121,47 +126,66 @@ const RegistrationForm = () => {
         }
     };
 
+    const [isChatOpen, setIsChatOpen] = useState(false);
+
     return (<div style={{
-            width: '300px',
-            margin: 'auto',
-            padding: '20px',
-            backgroundColor: '#f8f9fa',
-            borderRadius: '10px',
-            boxShadow: '0 4px 8px 0 rgba(0,0,0,0.2)'
-        }}>
-            <Space direction="vertical" size="large" style={{width: '100%'}}>
-                <Title level={2} style={{textAlign: 'center', color: '#343a40'}}>Thyme and Budget</Title>
-                <Text style={{textAlign: 'center', color: '#6c757d'}}>Share food, save the planet</Text>
-                <Form
-                    name="register"
-                    onFinish={onFinish}
-                    initialValues={{remember: true, role: 'receiver'}}
-                    scrollToFirstError
-                >
-                    <h1 style={{textAlign: 'center', color: '#333'}}>Registration</h1>
+        width: '300px',
+        margin: 'auto',
+        padding: '20px',
+        backgroundColor: '#f8f9fa',
+        borderRadius: '10px',
+        boxShadow: '0 4px 8px 0 rgba(0,0,0,0.2)'
+    }}>
+        <Space direction="vertical" size="large" style={{width: '100%'}}>
+            <Title level={2} style={{textAlign: 'center', color: '#343a40'}}>Thyme and Budget</Title>
+            <Text style={{textAlign: 'center', color: '#6c757d'}}>Share food, save the planet</Text>
+            <Form
+                name="register"
+                onFinish={onFinish}
+                initialValues={{remember: true, role: 'receiver'}}
+                scrollToFirstError
+            >
+                <h1 style={{textAlign: 'center', color: '#333'}}>Registration</h1>
 
-                    {getFormField("username", "Username", <Input/>)}
-                    {getFormField("password", "Password", <Input.Password/>)}
-                    {getFormField("confirm", "Confirm Password", <Input.Password/>)}
-                    {getFormField("first_name", "First Name", <Input/>)}
-                    {getFormField("last_name", "Last Name", <Input/>)}
-                    {getFormField("email", "Email", <Input/>)}
-                    {getFormField("role", "Role", <Select placeholder="Select a role"
-                                                          onChange={(value) => setRole(value)}>
-                        <Option value="donor">Donor</Option>
-                        <Option value="receiver">Receiver</Option>
-                    </Select>)}
-                    {getFormField("phone_number", "Phone Number", <Input/>)}
-                    {role === 'donor' && getFormField("postal_code", "Postal Code", <Input/>)}
+                {getFormField("username", "Username", <Input/>)}
+                {getFormField("password", "Password", <Input.Password/>)}
+                {getFormField("confirm", "Confirm Password", <Input.Password/>)}
+                {getFormField("first_name", "First Name", <Input/>)}
+                {getFormField("last_name", "Last Name", <Input/>)}
+                {getFormField("email", "Email", <Input/>)}
+                {getFormField("role", "Role", <Select placeholder="Select a role"
+                                                      onChange={(value) => setRole(value)}>
+                    <Option value="donor">Donor</Option>
+                    <Option value="receiver">Receiver</Option>
+                </Select>)}
+                {getFormField("phone_number", "Phone Number", <Input/>)}
+                {role === 'donor' && getFormField("postal_code", "Postal Code", <Input/>)}
 
-                    {getFormButton("primary", "submit", "Register")}
-                </Form>
-                <Button type="primary" htmlType="button" style={{width: '100%'}}
-                        onClick={() => navigate('/login')}>
-                    Login
-                </Button>
-            </Space>
-        </div>);
+                {getFormButton("primary", "submit", "Register")}
+            </Form>
+            <Button type="primary" htmlType="button" style={{width: '100%'}}
+                    onClick={() => navigate('/login')}>
+                Login
+            </Button>
+        </Space>
+        <div className={`chat-container ${isChatOpen ? 'open' : ''}`}
+             onClick={() => !isChatOpen && setIsChatOpen(true)}>
+            {isChatOpen && (
+                <>
+                    <button className="close-button" onClick={(event) => {
+                        event.stopPropagation();
+                        setIsChatOpen(false);
+                    }}>X
+                    </button>
+                    <Chatbot
+                        config={config}
+                        messageParser={MessageParser}
+                        actionProvider={ActionProvider}
+                    />
+                </>
+            )}
+        </div>
+    </div>);
 };
 
 export default RegistrationForm;

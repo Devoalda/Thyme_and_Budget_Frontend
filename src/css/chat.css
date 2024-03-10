@@ -1,0 +1,37 @@
+.chat-container {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background: url('../chatbot/chatbot.png') no-repeat center center;
+    background-color: #61dafb;
+    background-size: cover;
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    transition: width 0.3s ease-in-out, height 0.3s ease-in-out;
+}
+
+.chat-container.open {
+    width: 300px;
+    height: 500px;
+    border-radius: 15px;
+    background: none;
+    background-color: transparent;
+}
+
+.close-button {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: none;
+    border: none;
+    font-size: 20px;
+    cursor: pointer;
+    z-index: 1;
+    color: black; /* Change this to any color that will be visible on your background */
+}
