@@ -11,6 +11,9 @@ import Chatbot from "react-chatbot-kit";
 
 const {Title} = Typography;
 const pageSize = 6; // Set the number of items you want to display per page
+const rowStyle = {
+    margin: '0 0 0 10px', 
+  };
 
 // Function to fetch food data
 const fetchFoodData = async (setFood, setLoading, token) => {
@@ -99,7 +102,7 @@ export default function Home() {
     return (
         <div>
             <Title level={2} style={{ textAlign: 'center' }}>Food Items</Title>
-            <Row gutter={16}>
+            <Row gutter={16} style={rowStyle}>
                 {loading ? (
                     <Spin />
                 ) : currentFoodItems.length > 0 ? (

@@ -11,9 +11,9 @@ const layoutStyle = {
 };
 
 const logoStyle = {
-    maxWidth: '70%', // Limits the logo width relative to its container
-    height: 'auto', // Keeps the aspect ratio of the image
-    margin: '0 auto 16px', // Added margin to the bottom for spacing
+    maxWidth: '70%', 
+    height: 'auto', 
+    margin: '0 auto 16px', 
   };
 
   const siderStyle = {
@@ -22,20 +22,17 @@ const logoStyle = {
     overflow: 'auto',
     height: '100vh',
     position: 'fixed',
-    left: 0,
-    top: 0,
-    bottom: 0,
     overflow: 'hidden', // This prevents scrolling in the sidebar
   };
 
   const menuItemStyle = {
-    color: '#333', // Changed to a darker color for better contrast
+    color: '#333', 
     fontSize: '16px',
   };
   
   const iconStyle = {
-    fontSize: '18px', // you can adjust the size as needed
-    color: '#333', // same color as the text for consistency
+    fontSize: '18px', 
+    color: '#333', 
   };
   
   const menuStyle = {
@@ -43,29 +40,19 @@ const logoStyle = {
     borderRight: 'none',
   };
 
-// export default function LayoutComponent({ children }) {
-//   return (
-//     <Layout style={layoutStyle}>
-//       <Sider style={siderStyle} width={250}>
-//         <div className="logo" style={{ padding: '16px', textAlign: 'center', background: '#f0f2f5', }}>
-//           <img src={`${process.env.PUBLIC_URL}/images/logo.png`} alt="Logo" style={logoStyle} />
-//           <h1>Thyme and Budget</h1>
-//         </div>
-//         <Header />
-//       </Sider>
-//       <Layout style={{ marginLeft: 250 }}> {/* This value should be equal to the Sider's width */}
-//         <Content style={{ margin: '24px 16px 0', overflow: 'initial' }}>
-//           <div className="site-layout-background" style={{ padding: 24, textAlign: 'center' }}>
-//             {children}
-//           </div>
-//         </Content>
-//         <Footer style={footerStyle}>
-//           Thyme & Budget ©2024 Created by Team 15
-//         </Footer>
-//       </Layout>
-//     </Layout>
-//   );
-// }
+  const contentStyle = {
+    margin: '0',
+    background: '#E6F4EA', 
+    minHeight: '100vh', 
+    overflow: 'initial', 
+  };
+
+  const footerStyle = {
+    background: '#CDEBD9', 
+    color: '#333', 
+    textAlign: 'center',
+    padding: '12px 50px', 
+  };
 
 export default function LayoutComponent({ children }) {
     return (
@@ -93,14 +80,14 @@ export default function LayoutComponent({ children }) {
            </Menu>
         </Sider>
         <Layout style={{ marginLeft: 200 }}>
-          <Content style={{ margin: '24px 16px 0', overflow: 'initial' }}>
-            <div style={{ padding: 24, textAlign: 'center' }}>
-              {children}
-            </div>
-          </Content>
-          <Footer style={{ textAlign: 'center' }}>
-            Thyme & Budget ©2024 Created by Team 15
-          </Footer>
+            <Content style={contentStyle}>
+                <div style={{ textAlign: 'center' }}>
+                {children}
+                </div>
+            </Content>
+            <Footer style={footerStyle}>
+                Thyme & Budget ©2024 Created by Team 15
+            </Footer>
         </Layout>
       </Layout>
     );
