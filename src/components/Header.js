@@ -9,7 +9,11 @@ export default function Header() {
     const currentPath = location.pathname;
 
     return (
-        <Menu mode="horizontal" selectedKeys={[currentPath]}>
+        <Menu
+            mode="inline"
+            selectedKeys={[currentPath]}
+            style={{ height: '100%', borderRight: 0 }}
+        >
             <Item key="/home">
                 <Link to="/home">Home</Link>
             </Item>
