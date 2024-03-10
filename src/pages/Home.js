@@ -90,10 +90,5 @@ export default function Home() {
         <Row gutter={16}>
             {loading ? (<Spin/>) : food.length > 0 ? renderFoodItems(food) : (<NoFoodItemCard/>)}
         </Row>
-        <Chatbot
-            config={config}
-            messageParser={MessageParser}
-            actionProvider={ActionProvider}
-        />
     </div>);
 }
