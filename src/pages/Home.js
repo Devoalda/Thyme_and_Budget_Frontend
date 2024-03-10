@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {Col, message, Row, Spin, Typography, Pagination } from 'antd';
+import {Col, message, Row, Spin, Typography, Pagination, Input } from 'antd';
 import axios from "axios";
 import {useNavigate} from 'react-router-dom';
 import FoodItemCard from "../components/FoodItemCard";
@@ -10,15 +10,16 @@ import ActionProvider from '../chatbot/ActionProvider.js';
 import Chatbot from "react-chatbot-kit";
 
 const {Title} = Typography;
-const pageSize = 6; // Set the number of items you want to display per page
+const { Search } = Input;
+const pageSize = 6; 
+
 const rowStyle = {
     margin: '0 0 0 10px', 
   };
 
-// Function to fetch food data
 const fetchFoodData = async (setFood, setLoading, token) => {
     try {
-        console.log('Token:', token); // Add this line
+        console.log('Token:', token); 
 
         const config = token ? {
             headers: {
@@ -43,19 +44,18 @@ const fetchFoodData = async (setFood, setLoading, token) => {
     }
 };
 
-// Function to render food items
 const renderFoodItems = (food) => {
     return food.map((item, index) => (<Col key={index} span={8}>
         <FoodItemCard foodItem={item}/>
     </Col>));
 };
 
-// Main function
 export default function Home() {
     const [food, setFood] = useState([]);
     const [loading, setLoading] = useState(true);
     const navigate = useNavigate();
     const [currentPage, setCurrentPage] = useState(1);
+    const [searchTerm, setSearchTerm] = useState('');
 
     // get data from local storage
     const token = localStorage.getItem('token');
@@ -76,13 +76,10 @@ export default function Home() {
     };
 
     useEffect(() => {
-        // Check if token is present
         if (!token) {
-            // Redirect to login page if token is not present
             navigate('/login');
             return;
         }
-        // Send get request to /user/status/ with the token
         axios.get(`${process.env.REACT_APP_BACKEND_URL || 'http://localhost:8000'}/user/status/`, {
             headers: {
                 Authorization: `Bearer ${token}`
@@ -96,28 +93,50 @@ export default function Home() {
                 console.error('Error getting user status:', statusError);
                 navigate('/login');
             });
-        fetchFoodData(setFood, setLoading, token);
+        fetchFoodData(setFood, setLoading, token, searchTerm);
     }, []);
+    
+    const onSearch = (value) => {
+        setSearchTerm(value);
+    };
+
+    const filteredFoodItems = food.filter(item =>
+        item.name.toLowerCase().includes(searchTerm.toLowerCase())
+    );
 
     return (
         <div>
-            <Title level={2} style={{ textAlign: 'center' }}>Food Items</Title>
-            <Row gutter={16} style={rowStyle}>
+            <Title level={2} style={{ textAlign: 'center', margin: '16px 0' }}>Food Items</Title>
+            <div style={{ display: 'flex', justifyContent: 'center', margin: '16px 0' }}>
+                <Search
+                    placeholder="Search food items"
+                    onSearch={onSearch}
+                    enterButton
+                    size="large"
+                    style={{
+                        maxWidth: '600px', 
+                        borderRadius: '5px', 
+                        border: '1px solid #D9E8F5', 
+                    }}
+                />
+            </div>
+            <Row gutter={16} style={{ margin: '0 16px' }}> 
                 {loading ? (
-                    <Spin />
-                ) : currentFoodItems.length > 0 ? (
-                    renderFoodItems(currentFoodItems) // Use the current paginated items
+                    <Spin size="large" style={{ display: 'block', margin: '0 auto' }} />
+                ) : filteredFoodItems.length > 0 ? (
+                    renderFoodItems(filteredFoodItems)
                 ) : (
                     <NoFoodItemCard />
                 )}
             </Row>
-            {food.length > pageSize && ( // Only show pagination if there are more items than pageSize
+            {filteredFoodItems.length > pageSize && (
                 <Pagination
                     current={currentPage}
                     onChange={handlePageChange}
-                    total={food.length}
+                    total={filteredFoodItems.length}
                     pageSize={pageSize}
                     showSizeChanger={false}
+                    style={{ textAlign: 'center', margin: '20px 0' }} 
                 />
             )}
         </div>
