@@ -1,56 +1,15 @@
-import {React, useEffect} from 'react';
-import {Button, DatePicker, Form, Input, message, Space, Typography, Upload} from 'antd';
+import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import {useNavigate} from 'react-router-dom';
+import { Button, DatePicker, Form, Input, InputNumber, message, Space, Typography, Upload } from 'antd';
+import { UploadOutlined } from '@ant-design/icons';
 import LayoutComponent from '../components/Layout';
 
-const {Title, Text} = Typography;
+const { Title, Text } = Typography;
 
-// Function to convert file to base64
-const convertFileToBase64 = (file) => {
-    return new Promise((resolve, reject) => {
-        const reader = new FileReader();
-        reader.readAsDataURL(file);
-        reader.onloadend = () => resolve(reader.result.split(',')[1]);
-        reader.onerror = reject;
-    });
-};
-
-// Function to post food item
-const postFoodItem = async (values, base64Image) => {
-    const token = localStorage.getItem('token');
-    const response = await axios.post(`${process.env.REACT_APP_BACKEND_URL || 'http://localhost:8000'}/food/`, {
-        name: values.name,
-        expiry_date: values.expiry_date.format('YYYY-MM-DD'),
-        quantity: values.quantity,
-        postal_code: values.postal_code,
-        image: base64Image,
-    }, {
-        headers: {
-            'Authorization': `Bearer ${token}`
-        }
-    });
-    return response;
-};
-
-// Function to handle errors
-const handleErrors = (error) => {
-    if (error.response && error.response.status === 400) {
-        // Bad request
-        for (const [key, value] of Object.entries(error.response.data)) {
-            message.error(`${key}: ${value}`);
-        }
-    } else {
-        message.error('Failed to create food item');
-        if (process.env.NODE_ENV === 'development') {
-            console.log(error);
-        }
-    }
-};
-
-// Main function
 const NewFoodItem = () => {
     const navigate = useNavigate();
+    const [fileList, setFileList] = useState([]);
 
     useEffect(() => {
         // Get token from local storage
@@ -61,123 +20,147 @@ const NewFoodItem = () => {
             // Redirect to login page if token is not present
             navigate('/login');
         }
-        // Send get request to /user/status/ with the token
-        axios.get(`${process.env.REACT_APP_BACKEND_URL || 'http://localhost:8000'}/user/status/`, {
-            headers: {
-                Authorization: `Bearer ${token}`
-            }
-        })
-            .then(statusResponse  => {
-                console.log(statusResponse.data.role);
-            })
-            .catch(statusError  => {
-                // Handle error
-                console.error('Error getting user status:', statusError);
-                navigate('/login');
-            });
     }, [navigate]);
 
-    const onFinish = async (values) => {
+    const postFoodItem = async (values, base64Image) => {
+        const token = localStorage.getItem('token');
         try {
-            // Check if more than one file is uploaded
-            if (values.image.fileList.length > 1) {
-                message.error('You can only upload one file!');
-                return;
+            await axios.post(`${process.env.REACT_APP_BACKEND_URL || 'http://localhost:8000'}/food/`, {
+            name: values.name,
+            expiry_date: values.expiry_date.format('YYYY-MM-DD'),
+            quantity: values.quantity,
+            postal_code: values.postal_code,
+            image: base64Image,
+        }, {
+            headers: {
+                'Authorization': `Bearer ${token}`
             }
-
-            // Convert image file to base64 string
-            const base64Image = await convertFileToBase64(values.image.fileList[0].originFileObj);
-
-            // Send post request to backend
-            await postFoodItem(values, base64Image);
-
-            message.success('Food item created successfully!');
+        });
+        message.success('Food item created successfully!');
             navigate('/home');
         } catch (error) {
-            handleErrors(error);
+            message.error('Failed to create food item');
+            console.error(error);
         }
     };
 
-    // Render function
-    return (<LayoutComponent>
+    const beforeUpload = (file) => {
+        const isJpgOrJpeg = file.type === 'image/jpeg' || file.type === 'image/jpg';
+        if (!isJpgOrJpeg) {
+            message.error('You can only upload JPG/JPEG file!');
+        }
+        return isJpgOrJpeg ? true : Upload.LIST_IGNORE;
+    };
+
+    const onChange = ({ fileList: newFileList }) => {
+        setFileList(newFileList);
+    };
+
+    const onFinish = async (values) => {
+        if (fileList.length === 0) {
+            message.error('Please upload an image.');
+            return;
+        }
+
+        const file = fileList[0].originFileObj;
+        const base64Image = await convertFileToBase64(file);
+        
+        postFoodItem(values, base64Image);
+    };
+
+    const convertFileToBase64 = (file) => {
+        return new Promise((resolve, reject) => {
+            const reader = new FileReader();
+            reader.readAsDataURL(file);
+            reader.onload = () => resolve(reader.result.split(',')[1]);
+            reader.onerror = error => reject(error);
+        });
+    };
+
+    return (
+        <LayoutComponent>
             <div style={styles.container}>
-                <Space direction="vertical" size="large" style={{width: '100%'}}>
-                    <Title level={2} style={styles.title}>Thyme and Budget</Title>
-                    <Text style={styles.subtitle}>Share food, save the planet</Text>
+                <Space direction="vertical" size="middle" style={styles.space}>
+                    <Title level={2}>Add New Food Item</Title>
+                    <Text>Share food, save the planet</Text>
                     <Form
                         name="newFoodItem"
                         onFinish={onFinish}
-                        initialValues={{remember: true}}
+                        initialValues={{ remember: true }}
                         scrollToFirstError
+                        layout="vertical"
                     >
-                        <Form.Item name="name" rules={[{required: true, message: 'Please input the food item name!'}]}>
-                            <Input placeholder="Name"/>
+                        <Form.Item
+                            name="name"
+                            label="Name"
+                            rules={[{ required: true, message: 'Please input the food item name!' }]}
+                        >
+                            <Input placeholder="Enter food name" />
                         </Form.Item>
-                        <Form.Item name="expiry_date"
-                                   rules={[{required: true, message: 'Please input the expiry date!'}]}>
-                            <DatePicker placeholder="Expiry Date"/>
+                        <Form.Item
+                            name="expiry_date"
+                            label="Expiry Date"
+                            rules={[{ required: true, message: 'Please input the expiry date!' }]}
+                        >
+                            <DatePicker style={{ width: '100%' }} />
                         </Form.Item>
-                        <Form.Item name="quantity" rules={[{required: true, message: 'Please input the quantity!'}]}>
-                            <Input type="number" placeholder="Quantity"/>
+                        <Form.Item
+                            name="quantity"
+                            label="Quantity"
+                            rules={[{ required: true, message: 'Please input the quantity!' }]}
+                        >
+                            <InputNumber min={1} style={{ width: '100%' }} placeholder="Enter quantity" />
                         </Form.Item>
-
-                        <Form.Item name="postal_code" rules={[{required: true, message: 'Please input the location!'}]}>
-                            <Input type="text" placeholder="Collection Postal Code"/>
+                        <Form.Item
+                            name="postal_code"
+                            label="Collection Postal Code"
+                            rules={[{ required: true, message: 'Please input the postal code!' }]}
+                        >
+                            <Input placeholder="Enter postal code" />
                         </Form.Item>
-
-                        <Form.Item name="image" rules={[{required: true, message: 'Please upload an image!'}]}>
+                        <Form.Item
+                            name="image"
+                            label="Food Image"
+                            rules={[{ required: true, message: 'Please upload an image!' }]}
+                        >
                             <Upload
-                                name="image"
                                 listType="picture"
                                 beforeUpload={beforeUpload}
                                 onChange={onChange}
+                                onRemove={() => setFileList([])}
+                                maxCount={1}
                             >
-                                <Button>Click to upload</Button>
+                                <Button icon={<UploadOutlined />}>Upload Image</Button>
                             </Upload>
                         </Form.Item>
                         <Form.Item>
-                            <Button type="primary" htmlType="submit">
-                                Submit
+                            <Button type="primary" htmlType="submit" block>
+                                Submit Food Item
                             </Button>
                         </Form.Item>
                     </Form>
                 </Space>
             </div>
-        </LayoutComponent>);
+        </LayoutComponent>
+    );
 };
 
-// Styles
 const styles = {
     container: {
-        width: '300px',
-        margin: 'auto',
-        padding: '20px',
-        backgroundColor: '#f8f9fa',
-        borderRadius: '10px',
-        boxShadow: '0 4px 8px 0 rgba(0,0,0,0.2)'
-    }, title: {
-        textAlign: 'center', color: '#343a40'
-    }, subtitle: {
-        textAlign: 'center', color: '#6c757d'
-    }
+        padding: '40px',
+        maxWidth: '700px',
+        margin: '40px auto',
+        backgroundColor: '#ffffff',
+        borderRadius: '8px',
+        boxShadow: '0 4px 12px 0 rgba(0, 0, 0, 0.1)'
+    },
+    space: {
+        width: '100%',
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center'
+    },
 };
 
-// Before upload function
-const beforeUpload = (file) => {
-    const isJpgOrJpeg = file.type === 'image/jpeg' || file.type === 'image/jpg';
-    if (!isJpgOrJpeg) {
-        message.error('You can only upload JPG or JPEG files!');
-        return Upload.LIST_IGNORE;
-    }
-    return false;
-};
-
-// On change function
-const onChange = ({fileList}) => {
-    if (fileList.length > 1) {
-        message.error('You can only upload one file!');
-        fileList.splice(0, fileList.length - 1); // Remove all files except the last one
-    }
-};
 
 export default NewFoodItem;

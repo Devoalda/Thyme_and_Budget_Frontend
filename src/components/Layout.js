@@ -41,10 +41,11 @@ const logoStyle = {
   };
 
   const contentStyle = {
+    flexGrow: 1,
     margin: '0',
     background: '#E6F4EA', 
-    minHeight: '100vh', 
-    overflow: 'initial', 
+    padding: '24px 16px', 
+    overflow: 'auto', 
   };
 
   const footerStyle = {
