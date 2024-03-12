@@ -4,6 +4,7 @@ import axios from "axios";
 import {useNavigate} from 'react-router-dom';
 import FoodItemCard from "../components/FoodItemCard";
 import NoFoodItemCard from "../components/NoFoodItemCard";
+import LayoutComponent from '../components/Layout';
 
 const { Title } = Typography;
 const { Search } = Input;
@@ -49,49 +50,51 @@ export default function Home() {
     };
 
     return (
-        <div>
-            <Title level={2} style={{ textAlign: 'center', margin: '16px 0' }}>Food Items</Title>
-            <div style={{ display: 'flex', justifyContent: 'center', margin: '16px 0' }}>
-                <Search
-                    placeholder="Search food items"
-                    onChange={handleSearchChange}
-                    onSearch={onSearch}
-                    enterButton
-                    style={{ width: 500, height: 40, marginRight: 16 }}
-                />
-                <Select defaultValue="" onChange={handleSortChange} style={{ width: 200 }}>
-                    <Option value="">Sort by</Option>
-                    <Option value="name">Name</Option>
-                    <Option value="-name">Name (desc)</Option>
-                    <Option value="expiry_date">Expiry date</Option>
-                    <Option value="-expiry_date">Expiry date (desc)</Option>
-                    <Option value="quantity">Quantity</Option>
-                    <Option value="-quantity">Quantity (desc)</Option>
-                </Select>
-            </div>
-            <Row gutter={16} style={{ margin: '0 16px' }}>
-                {loading ? (
-                    <Spin size="large" style={{ display: 'block', margin: '0 auto' }} />
-                ) : food.length > 0 ? (
-                    food.map((item, index) => (
-                        <Col key={index} span={8}>
-                            <FoodItemCard foodItem={item} />
-                        </Col>
-                    ))
-                ) : (
-                    <NoFoodItemCard />
+        <LayoutComponent>
+            <div>
+                <Title level={2} style={{ textAlign: 'center', margin: '16px 0' }}>Food Items</Title>
+                <div style={{ display: 'flex', justifyContent: 'center', margin: '16px 0' }}>
+                    <Search
+                        placeholder="Search food items"
+                        onChange={handleSearchChange}
+                        onSearch={onSearch}
+                        enterButton
+                        style={{ width: 500, height: 40, marginRight: 16 }}
+                    />
+                    <Select defaultValue="" onChange={handleSortChange} style={{ width: 200 }}>
+                        <Option value="">Sort by</Option>
+                        <Option value="name">Name</Option>
+                        <Option value="-name">Name (desc)</Option>
+                        <Option value="expiry_date">Expiry date</Option>
+                        <Option value="-expiry_date">Expiry date (desc)</Option>
+                        <Option value="quantity">Quantity</Option>
+                        <Option value="-quantity">Quantity (desc)</Option>
+                    </Select>
+                </div>
+                <Row gutter={16} style={{ margin: '0 16px' }}>
+                    {loading ? (
+                        <Spin size="large" style={{ display: 'block', margin: '0 auto' }} />
+                    ) : food.length > 0 ? (
+                        food.map((item, index) => (
+                            <Col key={index} span={8}>
+                                <FoodItemCard foodItem={item} />
+                            </Col>
+                        ))
+                    ) : (
+                        <NoFoodItemCard />
+                    )}
+                </Row>
+                {(nextPageUrl || currentPage <= totalPages) && (
+                    <Pagination
+                        current={currentPage}
+                        onChange={handlePageChange}
+                        total={totalPages * 10}
+                        showSizeChanger={false}
+                        style={{ textAlign: 'center', margin: '20px 0' }}
+                    />
                 )}
-            </Row>
-            {(nextPageUrl || currentPage <= totalPages) && (
-                <Pagination
-                    current={currentPage}
-                    onChange={handlePageChange}
-                    total={totalPages * 10}
-                    showSizeChanger={false}
-                    style={{ textAlign: 'center', margin: '20px 0' }}
-                />
-            )}
-        </div>
+            </div>
+        </LayoutComponent>
     );
 }
 

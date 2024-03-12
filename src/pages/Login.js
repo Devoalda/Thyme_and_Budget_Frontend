@@ -49,7 +49,7 @@ const Login = () => {
                 }
                 else{
                     // Redirect to user landing page
-                    navigate('/home');
+                    navigate('/landing');
                 }
                 
             })
