@@ -1,4 +1,4 @@
-import React from 'react';
+import {React, useState} from 'react';
 import {useNavigate} from 'react-router-dom';
 import {Button, Form, Input, message, Space, Typography} from 'antd';
 import axios from "axios";
@@ -7,12 +7,13 @@ const {Title, Text} = Typography;
 
 const Login = () => {
     const navigate = useNavigate();
+    const [role, setRole] = useState('');
 
     // Check if user is already logged in
     const token = localStorage.getItem('token');
-    if (token !== null) {
-        window.location.href = '/home';
-    }
+    // if (token !== null) {
+    //     window.location.href = '/home';
+    // }
 
     const onFinish = (values) => {
         // Send post request to backend
@@ -26,8 +27,31 @@ const Login = () => {
                 if (process.env.NODE_ENV === 'development') {
                     localStorage.setItem('role', response.data.authenticatedUser.role);
                 }
-                // Redirect to home page
-                navigate('/home');
+
+                // Send get request to /user/status/ with the token
+                axios.get(`${process.env.REACT_APP_BACKEND_URL || 'http://localhost:8000'}/user/status/`, {
+                    headers: {
+                        Authorization: `Bearer ${response.data.access}`
+                    }
+                })
+                    .then(statusResponse  => {
+                        console.log(statusResponse.data.role);
+                        setRole(statusResponse.data.role);
+                    })
+                    .catch(statusError  => {
+                        // Handle error
+                        console.error('Error getting user status:', statusError);
+                    });
+
+                if (role == 'superuser') {
+                    // Redirect to admin landing page
+                    //navigate('/admin');
+                }
+                else{
+                    // Redirect to user landing page
+                    navigate('/home');
+                }
+                
             })
             .catch(error => {
                 // Handle error

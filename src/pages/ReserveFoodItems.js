@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { message, Spin, Form, Input, InputNumber, Button, Typography } from 'antd';
 import axios from 'axios';
 import LayoutComponent from '../components/Layout';
+import {useNavigate} from 'react-router-dom';
 
 const { Title } = Typography;
 
@@ -31,8 +32,30 @@ export default function ReserveFoodItems() {
     const [loading, setLoading] = useState(true);
     const token = localStorage.getItem('token');
     const foodId = new URLSearchParams(window.location.search).get('id');
+    const navigate = useNavigate();
+    
     console.log(token);
     useEffect(() => {
+        // Check if token is present
+        if (!token) {
+            // Redirect to login page if token is not present
+            navigate('/login');
+            return;
+        }
+        // Send get request to /user/status/ with the token
+        axios.get(`${process.env.REACT_APP_BACKEND_URL || 'http://localhost:8000'}/user/status/`, {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        })
+            .then(statusResponse  => {
+                console.log(statusResponse.data.role);
+            })
+            .catch(statusError  => {
+                // Handle error
+                console.error('Error getting user status:', statusError);
+                navigate('/login');
+            });
         fetchFoodItemData(setFoodItem, setLoading, foodId, token);
     }, [foodId, token]);
 
@@ -56,7 +79,11 @@ export default function ReserveFoodItems() {
             if (process.env.NODE_ENV === 'development') {
                 console.error('Error reserving food item:', error);
             }
-            message.error('Failed to reserve food item. Please try again.');
+            if (error.response && error.response.status === 400) {
+                for (const [key, value] of Object.entries(error.response.data)) {
+                    message.error(`${key}: ${value}`);
+                }
+            }
         }
     };
 

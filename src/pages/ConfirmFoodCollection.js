@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { message, Spin, Table, Button } from 'antd';
 import axios from 'axios';
 import LayoutComponent from '../components/Layout';
+import { useNavigate } from 'react-router-dom';
 
 // Function to fetch reserved food items
 const fetchReservedFoodItems = async (setReservedFoodItems, setLoading, token) => {
@@ -14,10 +15,10 @@ const fetchReservedFoodItems = async (setReservedFoodItems, setLoading, token) =
 
         const foodItemsData = await Promise.all(response.data.map(async (item) => {
             const foodItemData = await fetchFoodItemData(item.food_item, token);
-            console.log(foodItemData);
             return { ...item, foodItemData };
         }));
-
+        //log response
+        console.log('Response:', response.data);
         setReservedFoodItems(foodItemsData);
     } catch (error) {
         if (process.env.NODE_ENV === 'development') {
@@ -32,7 +33,7 @@ const fetchReservedFoodItems = async (setReservedFoodItems, setLoading, token) =
 // Function to fetch food item data
 const fetchFoodItemData = async (id, token) => {
     try {
-        const response = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/food-items/${id}/`, {
+        const response = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/food/${id}/`, {
             headers: {
                 Authorization: `Bearer ${token}`,
             },
@@ -50,7 +51,9 @@ export default function ConfirmFoodCollection() {
     const [reservedFoodItems, setReservedFoodItems] = useState([]);
     const [loading, setLoading] = useState(true);
     const [collectedItems, setCollectedItems] = useState([]); // New state variable
+    const [role, setRole] = useState('');
     const token = localStorage.getItem('token');
+    const navigate = useNavigate();
 
     const confirmCollection = async (record, token) => {
         try {
@@ -80,6 +83,23 @@ export default function ConfirmFoodCollection() {
     };
 
     useEffect(() => {
+        // Send get request to /user/status/ with the token
+        axios.get(`${process.env.REACT_APP_BACKEND_URL || 'http://localhost:8000'}/user/status/`, {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        })
+            .then(statusResponse  => {
+                console.log(statusResponse.data.role);
+                if (statusResponse.data.role !== 'superuser') {
+                    navigate('/home');
+                }
+            })
+            .catch(statusError  => {
+                // Handle error
+                console.error('Error getting user status:', statusError);
+                navigate('/login');
+            });
         fetchReservedFoodItems(setReservedFoodItems, setLoading, token);
     }, [token]);
 

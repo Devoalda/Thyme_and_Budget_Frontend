@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {Col, message, Row, Spin, Typography} from 'antd';
+import { List, message, Spin, Typography} from 'antd';
 import axios from "axios";
 import {useNavigate} from 'react-router-dom';
 import LayoutComponent from '../components/Layout';
@@ -28,14 +28,13 @@ const fetchFoodData = async (setFoodItems, setLoading, token) => {
 };
 
 // Function to render food items
-const renderFoodItems = (foodItems) => {
-    if (process.env.NODE_ENV === 'development') {
-        console.log('Food item:', foodItems);
-    }
-    return foodItems.map((foodItem, index) => (<Col key={index} span={8}>
-        <FoodItemCard foodItem={foodItem}/>
-    </Col>));
-};
+// const renderFoodItems = (foodItems) => {
+//     return foodItems.map((foodItem, index) => (
+//         <Col key={index} span={8} style={{ padding: '0 16px' }}>
+//             <FoodItemCard foodItem={foodItem} />
+//         </Col>
+//     ));
+// };
 
 // Main function
 export default function MyFoodItems() {
@@ -47,15 +46,57 @@ export default function MyFoodItems() {
     const token = localStorage.getItem('token');
 
     useEffect(() => {
+        // Check if token is present
+        if (!token) {
+            // Redirect to login page if token is not present
+            navigate('/login');
+            return;
+        }
+        // Send get request to /user/status/ with the token
+        axios.get(`${process.env.REACT_APP_BACKEND_URL || 'http://localhost:8000'}/user/status/`, {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        })
+            .then(statusResponse  => {
+                console.log(statusResponse.data.role);
+            })
+            .catch(statusError  => {
+                // Handle error
+                console.error('Error getting user status:', statusError);
+                navigate('/login');
+            });
         fetchFoodData(setFoodItems, setLoading, token);
     }, []);
 
-    return (<LayoutComponent>
-        <div>
-            <Title level={2} style={{textAlign: 'center'}}>My Food Items</Title>
-            <Row gutter={16}>
-                {loading ? (<Spin/>) : foodItems.length > 0 ? renderFoodItems(foodItems) : (<NoFoodItemCard/>)}
-            </Row>
-        </div>
-    </LayoutComponent>);
+    return (
+        <LayoutComponent>
+            <div style={{ padding: '24px', maxWidth: '1200px', margin: 'auto' }}>
+                <Title level={2} style={{ textAlign: 'center', marginBottom: '24px' }}>My Food Items</Title>
+                {loading ? (
+                    <Spin style={{ display: 'block', margin: '0 auto' }} />
+                ) : foodItems.length > 0 ? (
+                    <List
+                        grid={{
+                            gutter: 16,
+                            xs: 1,
+                            sm: 2,
+                            md: 3,
+                            lg: 4,
+                            xl: 4,
+                            xxl: 3,
+                        }}
+                        dataSource={foodItems}
+                        renderItem={item => (
+                            <List.Item>
+                                <FoodItemCard foodItem={item} />
+                            </List.Item>
+                        )}
+                    />
+                ) : (
+                    <NoFoodItemCard />
+                )}
+            </div>
+        </LayoutComponent>
+    );
 }

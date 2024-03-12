@@ -1,5 +1,7 @@
 import React from 'react';
 import {BrowserRouter as Router, Route, Routes} from 'react-router-dom';
+import Chatbot from 'react-chatbot-kit'
+import 'react-chatbot-kit/build/main.css'
 import Layout from './components/Layout';
 import Registration from './pages/Registration';
 import Login from './pages/Login';
