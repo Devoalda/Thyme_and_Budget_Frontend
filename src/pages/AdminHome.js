@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Table, Spin, Typography, message, Pagination, Input, Popover, Button, Modal } from 'antd';
 import axios from "axios";
 import LayoutComponent from "../components/Layout";
+import BarChart from "../components/BarChart";
 
 const { Title } = Typography;
 const { Search } = Input;
@@ -166,7 +167,6 @@ export default function AdminHome() {
                     content={
                         <div>
                             <Button type="primary" style={{ margin: '5px' }}>Update</Button>
-                            {/*<Button type="primary" style={{ margin: '5px' }} onClick={() => { setCurrentRecord(record); setModalVisible(true); }}>Confirm Collection</Button>*/}
                             <Button type="primary" danger style={{ margin: '5px' }} onClick={() => deleteFoodItem(record.id)}>Delete</Button>
                         </div>
                     }
@@ -249,6 +249,8 @@ export default function AdminHome() {
             >
                 <p>Are you sure you want to confirm the collection of this food item?</p>
             </Modal>
+            <Title level={2} style={{ textAlign: 'center', margin: '16px 0' }}>Popular Food Donated</Title>
+            <BarChart data={food} />
         </LayoutComponent>
     );
 }
