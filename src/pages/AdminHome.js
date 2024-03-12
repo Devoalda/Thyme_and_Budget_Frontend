@@ -97,37 +97,10 @@ export default function AdminHome() {
         }
     };
 
-    // const confirmCollection = async (record, token) => {
-    //     try {
-    //         console.log('Record:', record);
-    //         const requestData = {
-    //             quantity: 0,
-    //             phone_number: record.phone_number,
-    //             food_item: record.food_item,
-    //         };
-    //         console.log('Request data:', requestData); // Log the request data
-    //
-    //         const response = await axios.put(`${process.env.REACT_APP_BACKEND_URL}/collection/${record.id}/`, requestData, {
-    //             headers: {
-    //                 Authorization: `Bearer ${token}`,
-    //             },
-    //         });
-    //
-    //         console.log('Response:', response); // Log the response
-    //
-    //         message.success('Food item collected successfully');
-    //     } catch (error) {
-    //         if (process.env.NODE_ENV === 'development') {
-    //             console.error('Error confirming collection:', error);
-    //         }
-    //         message.error('Failed to confirm collection. Please try again.');
-    //     }
-    // };
-
     const confirmCollection = async (record, token) => {
         try {
             const requestData = {
-                quantity: 0,
+                quantity: record.quantity,
                 phone_number: record.phone_number,
                 food_item: record.food_item,
             };
@@ -139,7 +112,7 @@ export default function AdminHome() {
 
             message.success('Food item collected successfully');
             // Update the state of reservedFoodItems
-            setReservedFoodItems(prevItems => prevItems.map(item => item.id === record.id ? { ...item, quantity: 0 } : item));
+            setReservedFoodItems(prevItems => prevItems.map(item => item.id === record.id ? { ...item, collected: true } : item));
         } catch (error) {
             if (process.env.NODE_ENV === 'development') {
                 console.error('Error confirming collection:', error);
@@ -230,8 +203,8 @@ export default function AdminHome() {
             title: 'Action',
             key: 'action',
             render: (text, record) => (
-                record.quantity === 0 ? // Check if the item has been collected or quantity is 0
-                    <span style={{color: 'green'}}>Collected</span> : // If yes, show "Collected"
+                record.collected ? // Check if the item has been collected
+                    <span style={{color: 'green'}}>Confirmed</span> : // If yes, show "Confirmed"
                     <Button onClick={() => confirmCollection(record, token)}>Confirm Collection</Button> // If no, show the button
             ),
         },
