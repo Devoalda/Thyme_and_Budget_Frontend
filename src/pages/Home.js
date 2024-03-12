@@ -38,6 +38,7 @@ export default function Home() {
 
     const handleSearchChange = (e) => {
         setSearchTerm(e.target.value);
+        fetchFoodData(setFood, setLoading, setNextPageUrl, setTotalPages, token, currentPage, e.target.value)
     };
 
     const onSearch = (value) => {
