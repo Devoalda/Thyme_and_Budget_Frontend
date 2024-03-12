@@ -173,10 +173,12 @@ const MyProfile = () => {
                                 </Form.Item>
                                 
                                 <Form.Item>
-                                    <Button type="primary" onClick={() => showModal(false)} htmlType="button" style={{ marginRight: '8px' }}>
+                                    <Button type="primary" onClick={() => showModal(false)} block>
                                         Update Profile
                                     </Button>
-                                    <DeleteButton onClick={() => showModal(true)}>
+                                </Form.Item>
+                                <Form.Item>
+                                    <DeleteButton onClick={() => showModal(true)} block>
                                         Delete Profile
                                     </DeleteButton>
                                 </Form.Item>
