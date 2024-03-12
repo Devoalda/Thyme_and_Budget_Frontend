@@ -66,7 +66,7 @@ const RegistrationForm = () => {
     // Check if user is already logged in
     const token = localStorage.getItem('token');
     if (token !== null) {
-        navigate('/home');
+        navigate('/landing');
     }
 
     const onFinish = async (values) => {
