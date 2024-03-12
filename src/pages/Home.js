@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {Col, message, Row, Spin, Typography, Pagination, Input } from 'antd';
+import {Col, message, Row, Spin, Typography, Pagination, Input, Select } from 'antd';
 import axios from "axios";
 import {useNavigate} from 'react-router-dom';
 import FoodItemCard from "../components/FoodItemCard";
@@ -7,10 +7,7 @@ import NoFoodItemCard from "../components/NoFoodItemCard";
 
 const { Title } = Typography;
 const { Search } = Input;
-
-const rowStyle = {
-    margin: '0 0 0 10px',
-};
+const { Option } = Select;
 
 export default function Home() {
     const [food, setFood] = useState([]);
@@ -20,6 +17,7 @@ export default function Home() {
     const [searchTerm, setSearchTerm] = useState('');
     const [nextPageUrl, setNextPageUrl] = useState(null);
     const [totalPages, setTotalPages] = useState(0);
+    const [sortOption, setSortOption] = useState('');
 
     const token = localStorage.getItem('token');
 
@@ -33,16 +31,21 @@ export default function Home() {
 
     const handlePageChange = async page => {
         setCurrentPage(page);
-        fetchFoodData(setFood, setLoading, setNextPageUrl, setTotalPages, token, page);
+        fetchFoodData(setFood, setLoading, setNextPageUrl, setTotalPages, token, page, searchTerm, sortOption);
     };
 
     const handleSearchChange = (e) => {
         setSearchTerm(e.target.value);
-        fetchFoodData(setFood, setLoading, setNextPageUrl, setTotalPages, token, currentPage, e.target.value)
+        fetchFoodData(setFood, setLoading, setNextPageUrl, setTotalPages, token, currentPage, e.target.value, sortOption)
     };
 
     const onSearch = (value) => {
-        fetchFoodData(setFood, setLoading, setNextPageUrl, setTotalPages, token, currentPage, value);
+        fetchFoodData(setFood, setLoading, setNextPageUrl, setTotalPages, token, currentPage, value, sortOption);
+    };
+
+    const handleSortChange = (value) => {
+        setSortOption(value);
+        fetchFoodData(setFood, setLoading, setNextPageUrl, setTotalPages, token, currentPage, searchTerm, value);
     };
 
     return (
@@ -54,8 +57,17 @@ export default function Home() {
                     onChange={handleSearchChange}
                     onSearch={onSearch}
                     enterButton
-                    style={{ width: 500, height: 40 }}
+                    style={{ width: 500, height: 40, marginRight: 16 }}
                 />
+                <Select defaultValue="" onChange={handleSortChange} style={{ width: 200 }}>
+                    <Option value="">Sort by</Option>
+                    <Option value="name">Name</Option>
+                    <Option value="-name">Name (desc)</Option>
+                    <Option value="expiry_date">Expiry date</Option>
+                    <Option value="-expiry_date">Expiry date (desc)</Option>
+                    <Option value="quantity">Quantity</Option>
+                    <Option value="-quantity">Quantity (desc)</Option>
+                </Select>
             </div>
             <Row gutter={16} style={{ margin: '0 16px' }}>
                 {loading ? (
@@ -83,7 +95,7 @@ export default function Home() {
     );
 }
 
-async function fetchFoodData(setFood, setLoading, setNextPageUrl, setTotalPages, token, page = 1, query = '') {
+async function fetchFoodData(setFood, setLoading, setNextPageUrl, setTotalPages, token, page = 1, query = '', sort = '') {
     try {
         const config = token ? {
             headers: {
@@ -93,6 +105,9 @@ async function fetchFoodData(setFood, setLoading, setNextPageUrl, setTotalPages,
         let url = `${process.env.REACT_APP_BACKEND_URL}/food/?page=${page}`;
         if (query) {
             url += `&name=${query}`;
+        }
+        if (sort) {
+            url += `&sort_by=${sort}`;
         }
         const response = await axios.get(url, config);
         setFood(response.data.results);
