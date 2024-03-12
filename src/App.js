@@ -13,6 +13,7 @@ import MyFoodItems from './pages/MyFoodItems';
 import NewFoodItem from './pages/NewFoodItem';
 import ReserveFoodItems from './pages/ReserveFoodItems';
 import ConfirmFoodCollection from './pages/ConfirmFoodCollection';
+import AdminHome from "./pages/AdminHome";
 
 function App() {
     return (<Router>
@@ -31,6 +32,7 @@ function App() {
                         <Home/>
                     </Layout>}
                 />
+                <Route path="/admin" element={<AdminHome/>}/>
                 <Route path="*" element={<Error/>}/>
             </Routes>
         </Router>);
