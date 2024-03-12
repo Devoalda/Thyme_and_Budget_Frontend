@@ -23,7 +23,7 @@ const Login = () => {
         }
         else if (role !== '') {
             // Redirect to user landing page
-            navigate('/landing');
+            navigate('/home');
         }
     }, [role]);
 

@@ -1,6 +1,6 @@
 import React from 'react';
 import { Layout, Menu } from 'antd';
-import { HomeOutlined, AppstoreOutlined, PlusSquareOutlined, UserOutlined, LogoutOutlined } from '@ant-design/icons';
+import { HomeOutlined, AppstoreOutlined, PlusSquareOutlined, UserOutlined, LogoutOutlined, ShopOutlined } from '@ant-design/icons';
 import { Link } from 'react-router-dom';
 import Header from './Header';
 
@@ -66,16 +66,19 @@ export default function LayoutComponent({ children }) {
             <Menu.Item key="1" icon={<HomeOutlined style={iconStyle} />} style={menuItemStyle}>
                 <Link to="/home">Home</Link>
             </Menu.Item>
-            <Menu.Item key="2" icon={<AppstoreOutlined style={iconStyle} />} style={menuItemStyle}>
+            <Menu.Item key="2" icon={<ShopOutlined style={iconStyle} />} style={menuItemStyle}>
+                <Link to="/viewfooditems">View Food Items</Link>
+            </Menu.Item>
+            <Menu.Item key="3" icon={<AppstoreOutlined style={iconStyle} />} style={menuItemStyle}>
                 <Link to="/myfooditems">My Food Items</Link>
             </Menu.Item>
-            <Menu.Item key="3" icon={<PlusSquareOutlined style={iconStyle} />} style={menuItemStyle}>
+            <Menu.Item key="4" icon={<PlusSquareOutlined style={iconStyle} />} style={menuItemStyle}>
                 <Link to="/newfooditem">New Food Item</Link>
             </Menu.Item>
-            <Menu.Item key="4" icon={<UserOutlined style={iconStyle} />} style={menuItemStyle}>
+            <Menu.Item key="5" icon={<UserOutlined style={iconStyle} />} style={menuItemStyle}>
                 <Link to="/profile">Profile</Link>
             </Menu.Item>
-            <Menu.Item key="5" icon={<LogoutOutlined style={iconStyle} />} style={menuItemStyle}>
+            <Menu.Item key="6" icon={<LogoutOutlined style={iconStyle} />} style={menuItemStyle}>
                 <Link to="/logout">Logout</Link>
             </Menu.Item>
            </Menu>

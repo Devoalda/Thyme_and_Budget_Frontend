@@ -1,11 +1,9 @@
 import React from 'react';
 import {BrowserRouter as Router, Route, Routes} from 'react-router-dom';
-import Chatbot from 'react-chatbot-kit'
 import 'react-chatbot-kit/build/main.css'
-import Layout from './components/Layout';
 import Registration from './pages/Registration';
 import Login from './pages/Login';
-import Home from './pages/Home';
+import ViewFoodItems from './pages/ViewFoodItems';
 import Error from './pages/Error';
 import Logout from './pages/Logout';
 import MyProfile from './pages/Profile';
@@ -14,13 +12,13 @@ import NewFoodItem from './pages/NewFoodItem';
 import ReserveFoodItems from './pages/ReserveFoodItems';
 import ConfirmFoodCollection from './pages/ConfirmFoodCollection';
 import AdminHome from "./pages/AdminHome";
-import Landing from './pages/Landing';
+import Home from './pages/Home';
 
 function App() {
     return (<Router>
             <Routes>
-                <Route path="/" element={<Landing/>}/>
-                <Route path="/home"element={<Home/>}/>
+                <Route path="/home" element={<Home/>}/>
+                <Route path="/viewfooditems"element={<ViewFoodItems/>}/>
                 <Route path="/registration" element={<Registration/>}/>
                 <Route path="/myfooditems" element={<MyFoodItems/>}/>
                 <Route path="/newfooditem" element={<NewFoodItem/>}/>

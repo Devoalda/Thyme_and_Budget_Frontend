@@ -37,7 +37,7 @@ const NewFoodItem = () => {
             }
         });
         message.success('Food item created successfully!');
-            navigate('/home');
+            navigate('/viewfooditems');
         } catch (error) {
             message.error('Failed to create food item');
             console.error(error);

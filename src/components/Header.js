@@ -17,6 +17,9 @@ export default function Header() {
             <Item key="/home">
                 <Link to="/home">Home</Link>
             </Item>
+            <Item key="/viewfooditems">
+                <Link to="/viewfooditems">viewfooditems</Link>
+            </Item>
             {/*<Item key="/recipes">*/}
             {/*    <Link to="/recipes">Recipes</Link>*/}
             {/*</Item>*/}

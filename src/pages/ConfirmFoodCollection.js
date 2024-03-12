@@ -92,7 +92,7 @@ export default function ConfirmFoodCollection() {
             .then(statusResponse  => {
                 console.log(statusResponse.data.role);
                 if (statusResponse.data.role !== 'superuser') {
-                    navigate('/landing');
+                    navigate('/home');
                 }
             })
             .catch(statusError  => {
