@@ -1,4 +1,4 @@
-import {React, useState} from 'react';
+import {React, useState, useEffect} from 'react';
 import {useNavigate} from 'react-router-dom';
 import {Button, Form, Input, message, Space, Typography} from 'antd';
 import axios from "axios";
@@ -14,6 +14,18 @@ const Login = () => {
     // if (token !== null) {
     //     window.location.href = '/home';
     // }
+
+    useEffect(() => {
+        console.log("Role:", role);
+        if (role === 'superuser') {
+            // Redirect to admin landing page
+            navigate('/admin');
+        }
+        else if (role !== '') {
+            // Redirect to user landing page
+            navigate('/landing');
+        }
+    }, [role]);
 
     const onFinish = (values) => {
         // Send post request to backend
@@ -42,15 +54,6 @@ const Login = () => {
                         // Handle error
                         console.error('Error getting user status:', statusError);
                     });
-
-                if (role == 'superuser') {
-                    // Redirect to admin landing page
-                    //navigate('/admin');
-                }
-                else{
-                    // Redirect to user landing page
-                    navigate('/landing');
-                }
                 
             })
             .catch(error => {
