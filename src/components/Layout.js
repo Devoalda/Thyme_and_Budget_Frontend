@@ -54,7 +54,7 @@ const logoStyle = {
     padding: '12px 50px', 
   };
 
-export default function LayoutComponent({ children }) {
+export default function LayoutComponent({ children, role }) {
     return (
       <Layout style={layoutStyle}>
         <Sider style={siderStyle} width={200}>
@@ -63,21 +63,22 @@ export default function LayoutComponent({ children }) {
           </div>
           <Menu mode="inline" style={menuStyle} defaultSelectedKeys={['1']}>
             <Menu.Item key="1" icon={<HomeOutlined style={iconStyle} />} style={menuItemStyle}>
-                <Link to="/home">Home</Link>
+                <Link to={role === 'superuser' ? "/admin" : "/home"}>Home</Link>
             </Menu.Item>
-            <Menu.Item key="2" icon={<ShopOutlined style={iconStyle} />} style={menuItemStyle}>
-                <Link to="/viewfooditems">View Food Items</Link>
-            </Menu.Item>
-            <Menu.Item key="3" icon={<AppstoreOutlined style={iconStyle} />} style={menuItemStyle}>
-                <Link to="/myfooditems">My Food Items</Link>
-            </Menu.Item>
-            <Menu.Item key="4" icon={<PlusSquareOutlined style={iconStyle} />} style={menuItemStyle}>
-                <Link to="/newfooditem">New Food Item</Link>
-            </Menu.Item>
-            <Menu.Item key="5" icon={<UserOutlined style={iconStyle} />} style={menuItemStyle}>
-                <Link to="/profile">Profile</Link>
-            </Menu.Item>
-            <Menu.Item key="6" icon={<LogoutOutlined style={iconStyle} />} style={menuItemStyle}>
+            {role !== 'superuser' && (
+              <>
+                <Menu.Item key="2" icon={<AppstoreOutlined style={iconStyle} />} style={menuItemStyle}>
+                    <Link to="/myfooditems">My Food Items</Link>
+                </Menu.Item>
+                <Menu.Item key="3" icon={<PlusSquareOutlined style={iconStyle} />} style={menuItemStyle}>
+                    <Link to="/newfooditem">New Food Item</Link>
+                </Menu.Item>
+                <Menu.Item key="4" icon={<UserOutlined style={iconStyle} />} style={menuItemStyle}>
+                    <Link to="/profile">Profile</Link>
+                </Menu.Item>
+              </>
+            )}
+            <Menu.Item key="5" icon={<LogoutOutlined style={iconStyle} />} style={menuItemStyle}>
                 <Link to="/logout">Logout</Link>
             </Menu.Item>
            </Menu>
