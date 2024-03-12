@@ -128,6 +128,12 @@ const RegistrationForm = () => {
 
     const [isChatOpen, setIsChatOpen] = useState(false);
 
+    const logoStyle = {
+        maxWidth: '70%', // Adjust the maximum width as needed
+        height: 'auto',
+        margin: 'auto', // Center horizontally
+    };
+
     return (<div style={{
         width: '300px',
         margin: 'auto',
@@ -137,6 +143,7 @@ const RegistrationForm = () => {
         boxShadow: '0 4px 8px 0 rgba(0,0,0,0.2)'
     }}>
         <Space direction="vertical" size="large" style={{width: '100%'}}>
+            <img src={`${process.env.PUBLIC_URL}/images/logo.png`} alt="Logo" style={logoStyle} />
             <Title level={2} style={{textAlign: 'center', color: '#343a40'}}>Thyme and Budget</Title>
             <Text style={{textAlign: 'center', color: '#6c757d'}}>Share food, save the planet</Text>
             <Form
