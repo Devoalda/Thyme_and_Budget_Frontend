@@ -19,7 +19,6 @@ const logoStyle = {
   const siderStyle = {
     background: '#D9E8F5', 
     boxShadow: '2px 0px 5px rgba(0, 0, 0, 0.1)',
-    overflow: 'auto',
     height: '100vh',
     position: 'fixed',
     overflow: 'hidden', // This prevents scrolling in the sidebar
