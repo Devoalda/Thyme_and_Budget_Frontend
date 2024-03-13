@@ -14,8 +14,8 @@ export default function Header() {
             selectedKeys={[currentPath]}
             style={{ height: '100%', borderRight: 0 }}
         >
-            <Item key="/home">
-                <Link to="/home">Home</Link>
+            <Item key="/">
+                <Link to="/">Home</Link>
             </Item>
             <Item key="/viewfooditems">
                 <Link to="/viewfooditems">viewfooditems</Link>

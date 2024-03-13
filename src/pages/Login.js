@@ -12,7 +12,7 @@ const Login = () => {
     // Check if user is already logged in
     const token = localStorage.getItem('token');
     // if (token !== null) {
-    //     window.location.href = '/home';
+    //     window.location.href = '/';
     // }
 
     useEffect(() => {
@@ -23,7 +23,7 @@ const Login = () => {
         }
         else if (role !== '') {
             // Redirect to user landing page
-            navigate('/home');
+            navigate('/');
         }
     }, [role]);
 

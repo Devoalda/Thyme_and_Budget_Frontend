@@ -17,7 +17,7 @@ import Home from './pages/Home';
 function App() {
     return (<Router>
             <Routes>
-                <Route path="/home" element={<Home/>}/>
+                <Route path="/" element={<Home/>}/>
                 <Route path="/viewfooditems"element={<ViewFoodItems/>}/>
                 <Route path="/registration" element={<Registration/>}/>
                 <Route path="/myfooditems" element={<MyFoodItems/>}/>

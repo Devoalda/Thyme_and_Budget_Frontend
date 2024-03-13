@@ -13,7 +13,7 @@ const Error = () => {
             extra={
                 <>
                     <Button type="primary" onClick={() => window.history.back()}>Go Back</Button>
-                    <Link to="/home">
+                    <Link to="/">
                         <Button type="primary">Back to Home</Button>
                     </Link>
                 </>

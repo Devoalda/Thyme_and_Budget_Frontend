@@ -74,22 +74,25 @@ export default function LayoutComponent({ children, role }) {
         </div>
         <Menu mode="inline" style={{ background: 'none', borderRight: 'none' }} defaultSelectedKeys={['1']}>
           <Menu.Item key="1" icon={<HomeOutlined />} style={menuItemStyle('1')} onMouseEnter={() => handleMouseEnter('1')}>
-              <Link to={role === 'superuser' ? "/admin" : "/home"}>Home</Link>
+              <Link to={role === 'superuser' ? "/admin" : "/"}>Home</Link>
           </Menu.Item>
           {role !== 'superuser' && (
             <>
-              <Menu.Item key="2" icon={<AppstoreOutlined />} style={menuItemStyle('2')} onMouseEnter={() => handleMouseEnter('2')}>
+              <Menu.Item key="2" icon={<ShopOutlined />} style={menuItemStyle('2')} onMouseEnter={() => handleMouseEnter('2')}>
+                  <Link to="/viewfooditems">View Food Items</Link>
+              </Menu.Item>
+              <Menu.Item key="3" icon={<AppstoreOutlined />} style={menuItemStyle('3')} onMouseEnter={() => handleMouseEnter('3')}>
                   <Link to="/myfooditems">My Food Items</Link>
               </Menu.Item>
-              <Menu.Item key="3" icon={<PlusSquareOutlined />} style={menuItemStyle('3')} onMouseEnter={() => handleMouseEnter('3')}>
+              <Menu.Item key="4" icon={<PlusSquareOutlined />} style={menuItemStyle('4')} onMouseEnter={() => handleMouseEnter('4')}>
                   <Link to="/newfooditem">New Food Item</Link>
               </Menu.Item>
-              <Menu.Item key="4" icon={<UserOutlined />} style={menuItemStyle('4')} onMouseEnter={() => handleMouseEnter('4')}>
+              <Menu.Item key="5" icon={<UserOutlined />} style={menuItemStyle('5')} onMouseEnter={() => handleMouseEnter('5')}>
                   <Link to="/profile">Profile</Link>
               </Menu.Item>
             </>
           )}
-          <Menu.Item key="5" icon={<LogoutOutlined />} style={menuItemStyle('5')} onMouseEnter={() => handleMouseEnter('5')}>
+          <Menu.Item key="6" icon={<LogoutOutlined />} style={menuItemStyle('6')} onMouseEnter={() => handleMouseEnter('6')}>
               <Link to="/logout">Logout</Link>
           </Menu.Item>
         </Menu>
