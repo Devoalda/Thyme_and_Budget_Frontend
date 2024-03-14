@@ -44,6 +44,35 @@ const NewFoodItem = () => {
         }
     };
 
+    const postImage = async (file, values) =>
+    {
+        const formData = new FormData();
+        formData.append('file', file);
+
+        try {
+            const response = await axios.post(`${process.env.THYME_AND_BUDGET_RECOGNITION_URL || 'http://127.0.0.1:5000'}/classify-image`, formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                },
+            });
+            const prediction = response.data.prediction;
+            console.log("Prediction: " + prediction);
+            //console.log("RECOGNITION RESPONSE: " + JSON.stringify(response.data));
+            if (prediction.lower === 'food') {
+                const base64Image = await convertFileToBase64(file);
+                postFoodItem(values, base64Image);
+            }
+            else
+            {
+                // message popup displaying error that image is not a food item
+                message.error('Image is not a food item');
+            }
+
+        } catch (error) {
+            console.error(error);
+        }
+    };
+
     const beforeUpload = (file) => {
         const isJpgOrJpeg = file.type === 'image/jpeg' || file.type === 'image/jpg';
         if (!isJpgOrJpeg) {
@@ -65,7 +94,8 @@ const NewFoodItem = () => {
         const file = fileList[0].originFileObj;
         const base64Image = await convertFileToBase64(file);
         
-        postFoodItem(values, base64Image);
+        //postFoodItem(values, base64Image);
+        postImage(file, values);
     };
 
     const convertFileToBase64 = (file) => {
