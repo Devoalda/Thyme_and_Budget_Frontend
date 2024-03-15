@@ -129,10 +129,9 @@ export default function ReserveFoodItems() {
                         name="quantity" 
                         label="Quantity to Reserve" 
                         rules={[{ required: true, message: 'Please enter the quantity!' }]}
+                        style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }} 
                     >
-                        <div style={{ display: 'flex', justifyContent: 'center' }}>
-                        <InputNumber min={1} max={foodItem.quantity} style={{ width: '40%' }} />
-                    </div>
+                        <InputNumber min={1} max={foodItem.quantity} />
                     </Form.Item>
                     <Form.Item>
                         <div style={{ display: 'flex', justifyContent: 'center' }}>

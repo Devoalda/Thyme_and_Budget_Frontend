@@ -1,46 +1,18 @@
 import React from 'react';
-import {Menu} from 'antd';
-import {Link, useLocation} from 'react-router-dom';
-
-const {Item} = Menu;
+import { Button, Row, Col } from 'antd';
+import { Link } from 'react-router-dom';
 
 export default function Header() {
-    const location = useLocation();
-    const currentPath = location.pathname;
-
     return (
-        <Menu
-            mode="inline"
-            selectedKeys={[currentPath]}
-            style={{ height: '100%', borderRight: 0 }}
-        >
-            <Item key="/">
-                <Link to="/">Home</Link>
-            </Item>
-            <Item key="/viewfooditems">
-                <Link to="/viewfooditems">viewfooditems</Link>
-            </Item>
-            {/*<Item key="/recipes">*/}
-            {/*    <Link to="/recipes">Recipes</Link>*/}
-            {/*</Item>*/}
-            {/*<Item key="/nutrition">*/}
-            {/*    <Link to="/nutrition">Nutrition Values</Link>*/}
-            {/*</Item>*/}
-            {/*<Item key="/mealplan">*/}
-            {/*    <Link to="/mealplan">Get Meal Plan</Link>*/}
-            {/*</Item>*/}
-            <Item key="/myfooditems">
-                <Link to="/myfooditems">My Food Items</Link>
-            </Item>
-            <Item key="/newfooditem">
-                <Link to="/newfooditem">New Food Item</Link>
-            </Item>
-            <Item key="/profile">
-                <Link to="/profile">Profile</Link>
-            </Item>
-            <Item key="/logout">
-                <Link to="/logout">Logout</Link>
-            </Item>
-        </Menu>
+        <Row justify="end" align="middle" style={{ height: '100%' }}>
+            <Col>
+                <Button type="link" style={{ marginRight: 16 }}>
+                    <Link to="/login">Login</Link>
+                </Button>
+                <Button type="primary">
+                    <Link to="/registration">Registration</Link>
+                </Button>
+            </Col>
+        </Row>
     );
 }
