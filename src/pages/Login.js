@@ -62,15 +62,40 @@ const Login = () => {
             });
     };
 
-    return (<div style={{
-            width: '300px',
-            margin: 'auto',
-            padding: '20px',
-            backgroundColor: '#f8f9fa',
-            borderRadius: '10px',
-            boxShadow: '0 4px 8px 0 rgba(0,0,0,0.2)'
-        }}>
-            <Space direction="vertical" size="large" style={{width: '100%'}}>
+    return (
+        <div style={{
+            display: 'flex',
+            height: '100vh', // Ensures the div is exactly the height of the viewport
+            alignItems: 'center',
+            justifyContent: 'space-around', // Use space-around to evenly distribute horizontal space
+            backgroundColor: '#E6F4EA',
+            overflow: 'hidden', // Prevents scrolling by hiding overflow content
+            padding: '0 2%', // Adjusted to 2% to reduce padding, you can adjust as needed
+          }}>
+             <div style={{
+                flex: 1,
+                display: 'flex',
+                flexDirection: 'column',
+                justifyContent: 'center',
+                padding: '0 2%', // Ensures padding does not cause overflow
+            }}>
+              <Title>Welcome to Thyme and Budget Website</Title>
+              <Text>"Thyme and Budget is a compassionate platform dedicated to the eradication of hunger. Our mission is to foster a community where surplus food is shared,
+                     not wasted. We connect donors with those in need, facilitating food donations that provide sustenance to the underprivileged and foster hope.
+                     By leveraging the power of generosity and technology, Thyme and Budget aims to create a world where everyone has access to nourishing meals,
+                     making zero hunger an achievable reality. Join us in the fight against hunger – because no one should go to bed hungry."</Text>
+            </div>
+            <div style={{
+                flexBasis: '400px', // Specifies the initial size of the form section
+                flexGrow: 0, // Prevents the form section from growing
+                padding: '2%', // Adjust as needed
+                backgroundColor: '#fff',
+                borderRadius: '10px',
+                boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
+                display: 'flex',
+                flexDirection: 'column',
+                justifyContent: 'center',
+            }}>
                 <Title level={2} style={{textAlign: 'center', color: '#343a40'}}>Thyme and Budget</Title>
                 <Text style={{textAlign: 'center', color: '#6c757d'}}>Share food, save the planet</Text>
                 <Form
@@ -104,13 +129,14 @@ const Login = () => {
                     </Form.Item>
                     <Form.Item>
                         <Button type="primary" htmlType="button" size="large" style={{width: '100%'}}
-                                onClick={() => navigate('/')}>
+                                onClick={() => navigate('/registration')}>
                             Register
                         </Button>
                     </Form.Item>
                 </Form>
-            </Space>
-        </div>);
+            </div>
+        </div>
+    );
 };
 
 export default Login;
