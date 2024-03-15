@@ -89,39 +89,57 @@ export default function ReserveFoodItems() {
 
     return (
         <LayoutComponent>
-            <Title level={2} style={{ textAlign: 'center' }}>Food Item Details</Title>
+            <Title level={2} style={{ textAlign: 'center' }}>Reserve Food Item</Title>
             {loading ? (
                 <Spin />
             ) : (
                 <Form
-                style={{backgroundColor: 'white', padding: '20px', borderRadius: '10px', boxShadow: '0 4px 8px 0 rgba(0,0,0,0.2)'}}
-                    name="update_food_item"
-                    initialValues={foodItem}
+                    layout="vertical"
+                    style={{
+                        backgroundColor: 'white',
+                        padding: '20px',
+                        borderRadius: '10px',
+                        boxShadow: '0 4px 8px 0 rgba(0,0,0,0.2)',
+                        width: '100%', // Take the full width of the container
+                        maxWidth: '500px', // Set a maximum width for the form
+                        margin: 'auto' // Automatically margin it for center alignment
+                    }}
+                    name="reserve_food_item"
                     onFinish={onFinish}
                 >
-                    <Form.Item name="name" label="Name">
-                        <Input disabled />
-                    </Form.Item>
-                    <Form.Item name="image" label="Image">
+                    <Typography.Text strong>Name:</Typography.Text>
+                    <Typography.Paragraph>{foodItem.name}</Typography.Paragraph>
+
+                    <Typography.Text strong>Image:</Typography.Text>
+                    <div style={{marginBottom: '24px'}}>
                         <img
                             alt={foodItem.name}
-                            src={foodItem.image ? foodItem.image : defaultImageUrl}
-                            style={{width: '100px', height: '100px', objectFit: 'cover'}}
+                            src={foodItem.image || defaultImageUrl}
+                            style={{width: '150px', height: '150px', objectFit: 'cover', borderRadius: '8px'}}
                         />
-                    </Form.Item>
-                    <Form.Item name="expiry_date" label="Expiry Date">
-                        <Input disabled />
-                    </Form.Item>
-                    <Form.Item name="location" label="Location">
-                        <Input disabled />
-                    </Form.Item>
-                    <Form.Item name="quantity" label="Quantity">
-                        <InputNumber min={1} max={foodItem.quantity} />
+                    </div>
+
+                    <Typography.Text strong>Expiry Date:</Typography.Text>
+                    <Typography.Paragraph>{foodItem.expiry_date}</Typography.Paragraph>
+
+                    <Typography.Text strong>Location:</Typography.Text>
+                    <Typography.Paragraph>{foodItem.location}</Typography.Paragraph>
+
+                    <Form.Item 
+                        name="quantity" 
+                        label="Quantity to Reserve" 
+                        rules={[{ required: true, message: 'Please enter the quantity!' }]}
+                    >
+                        <div style={{ display: 'flex', justifyContent: 'center' }}>
+                        <InputNumber min={1} max={foodItem.quantity} style={{ width: '40%' }} />
+                    </div>
                     </Form.Item>
                     <Form.Item>
-                        <Button type="primary" htmlType="submit">
-                            Reserve
-                        </Button>
+                        <div style={{ display: 'flex', justifyContent: 'center' }}>
+                            <Button type="primary" htmlType="submit" style={{ width: '40%' }}>
+                                Reserve
+                            </Button>
+                        </div>
                     </Form.Item>
                 </Form>
             )}
