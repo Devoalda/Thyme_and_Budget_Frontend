@@ -10,15 +10,26 @@ const { Title, Text } = Typography;
 const NewFoodItem = () => {
     const navigate = useNavigate();
     const [fileList, setFileList] = useState([]);
+    const [role, setRole] = useState(null);
 
     useEffect(() => {
-        // Get token from local storage
         const token = localStorage.getItem('token');
 
-        // Check if token is present
         if (!token) {
-            // Redirect to login page if token is not present
             navigate('/login');
+        } else {
+            axios.get(`${process.env.REACT_APP_BACKEND_URL || 'http://localhost:8000'}/user/status/`, {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            })
+                .then(response => {
+                    setRole(response.data.role);
+                })
+                .catch(error => {
+                    console.error('Error getting user status:', error);
+                    navigate('/login')
+                });
         }
     }, [navigate]);
 
@@ -57,14 +68,12 @@ const NewFoodItem = () => {
             });
             const prediction = response.data.prediction;
             console.log("Prediction: " + prediction);
-            //console.log("RECOGNITION RESPONSE: " + JSON.stringify(response.data));
             if (prediction.lower === 'food') {
                 const base64Image = await convertFileToBase64(file);
                 postFoodItem(values, base64Image);
             }
             else
             {
-                // message popup displaying error that image is not a food item
                 message.error('Image is not a food item');
             }
 

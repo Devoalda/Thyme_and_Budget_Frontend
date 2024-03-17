@@ -8,7 +8,6 @@ import NoFoodItemCard from "../components/NoFoodItemCard";
 
 const {Title} = Typography;
 
-// Function to fetch food data
 const fetchFoodData = async (setFoodItems, setLoading, token) => {
     try {
         const response = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/food/user_food_items/`, {
@@ -27,46 +26,33 @@ const fetchFoodData = async (setFoodItems, setLoading, token) => {
     }
 };
 
-// Function to render food items
-// const renderFoodItems = (foodItems) => {
-//     return foodItems.map((foodItem, index) => (
-//         <Col key={index} span={8} style={{ padding: '0 16px' }}>
-//             <FoodItemCard foodItem={foodItem} />
-//         </Col>
-//     ));
-// };
-
-// Main function
 export default function MyFoodItems() {
     const [foodItems, setFoodItems] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [role, setRole] = useState(null);
     const navigate = useNavigate();
 
-    // get data from local storage
     const token = localStorage.getItem('token');
 
     useEffect(() => {
-        // Check if token is present
         if (!token) {
-            // Redirect to login page if token is not present
             navigate('/login');
             return;
         }
-        // Send get request to /user/status/ with the token
         axios.get(`${process.env.REACT_APP_BACKEND_URL || 'http://localhost:8000'}/user/status/`, {
             headers: {
                 Authorization: `Bearer ${token}`
             }
         })
             .then(statusResponse  => {
+                setRole(statusResponse.data.role);
+                fetchFoodData(setFoodItems, setLoading, token);
                 console.log(statusResponse.data.role);
             })
             .catch(statusError  => {
-                // Handle error
                 console.error('Error getting user status:', statusError);
                 navigate('/login');
             });
-        fetchFoodData(setFoodItems, setLoading, token);
     }, []);
 
     return (

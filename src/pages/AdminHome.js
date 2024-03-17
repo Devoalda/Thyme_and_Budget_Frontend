@@ -109,7 +109,7 @@ export default function AdminHome() {
             const url = `${process.env.REACT_APP_BACKEND_URL}/food/${id}/`;
             await axios.delete(url, config);
             message.success('Food item deleted successfully.');
-            fetchFoodData(currentPage, searchTerm); // Refresh the data
+            fetchFoodData(currentPage, searchTerm);
         } catch (error) {
             message.error('Failed to delete food item. Please try again.');
         }
@@ -129,7 +129,6 @@ export default function AdminHome() {
             });
 
             message.success('Food item collected successfully');
-            // Update the state of reservedFoodItems
             setReservedFoodItems(prevItems => prevItems.map(item => item.id === record.id ? { ...item, collected: true } : item));
         } catch (error) {
             if (process.env.NODE_ENV === 'development') {
@@ -220,9 +219,9 @@ export default function AdminHome() {
             title: 'Action',
             key: 'action',
             render: (text, record) => (
-                record.collected ? // Check if the item has been collected
-                    <span style={{color: 'green'}}>Confirmed</span> : // If yes, show "Confirmed"
-                    <Button onClick={() => confirmCollection(record, token)}>Confirm Collection</Button> // If no, show the button
+                record.collected ? 
+                    <span style={{color: 'green'}}>Confirmed</span> : 
+                    <Button onClick={() => confirmCollection(record, token)}>Confirm Collection</Button> 
             ),
         },
     ];

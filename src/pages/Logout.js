@@ -21,7 +21,6 @@ const Logout = () => {
                 headers: {Authorization: `Bearer ${token}`}
             });
 
-            // Check if the response status is 200 (OK)
             if (response.status === 200) {
                 message.success(response.data.message);
                 removeTokens();

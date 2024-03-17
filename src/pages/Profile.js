@@ -32,9 +32,27 @@ const MyProfile = () => {
     const [isDeleteMode, setIsDeleteMode] = useState(false);
     const { formData, setFormData, dataFetched, fetchData, clearData } = useProfileData(); 
     const [form] = Form.useForm();
+    const token = localStorage.getItem('token');
+    const [role, setRole] = useState(null);
 
     useEffect(() => {
-        fetchData(); 
+        if (!token) {
+            navigate('/login');
+            return;
+        }
+        axios.get(`${process.env.REACT_APP_BACKEND_URL || 'http://localhost:8000'}/user/status/`, {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        })
+            .then(response => {
+                setRole(response.data.role); 
+                fetchData();
+            })
+            .catch(error => {
+                console.error('Error getting user status:', error);
+                navigate('/login');
+            });
     }, [fetchData]);
 
     const onFinish = async (values) => {
@@ -55,16 +73,15 @@ const MyProfile = () => {
             );
     
             message.success('Profile updated successfully!');
-            form.resetFields(); // Clear the form fields
+            form.resetFields(); 
 
-            // Set the values of the disabled fields
             form.setFieldsValue({
                 username: values.username,
                 role: values.role,
             });
 
-            setFormData({}); // Clear the form data
-            navigate('/profile'); 
+            setFormData({}); 
+            navigate('/'); 
     
         } catch (error) {
             console.error('Error updating profile:', error);
@@ -82,11 +99,10 @@ const MyProfile = () => {
             );
     
             message.success('Profile deleted successfully!');
-            localStorage.removeItem('token'); 
-            navigate('/login');
+            localStorage.clear();
+            navigate('/');
     
         } catch (error) {
-            // Handle error response
             console.error('Error deleting profile:', error);
             message.error('Failed to delete profile. Please try again later.');
         }
