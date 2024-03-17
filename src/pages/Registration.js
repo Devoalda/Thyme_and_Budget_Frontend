@@ -185,23 +185,6 @@ const RegistrationForm = () => {
                 Login
             </Button>   
         </div>
-        <div className={`chat-container ${isChatOpen ? 'open' : ''}`}
-             onClick={() => !isChatOpen && setIsChatOpen(true)}>
-            {isChatOpen && (
-                <>
-                    <button className="close-button" onClick={(event) => {
-                        event.stopPropagation();
-                        setIsChatOpen(false);
-                    }}>X
-                    </button>
-                    <Chatbot
-                        config={config}
-                        messageParser={MessageParser}
-                        actionProvider={ActionProvider}
-                    />
-                </>
-            )}
-        </div>
     </div>);
 };
 
