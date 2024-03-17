@@ -4,11 +4,12 @@ import { createChatBotMessage, createCustomMessage, createClientMessage } from '
 import Options from "./Options";
 
 const config = {
-botName: "Thyme and Budget",
+botName: "Thyme Bot",
     initialMessages: [
-        createChatBotMessage("Hello, how can I assist you today?", {
-                widget: "options",
-            }),
+        createChatBotMessage("Hello! I am Thyme Bot. Type 'help' to display options available."),
+        // createChatBotMessage("Hello, how can I assist you today?", {
+        //         widget: "options",
+        //     }),
     ],
     widgets: [
         {
