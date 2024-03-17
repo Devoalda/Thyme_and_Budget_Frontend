@@ -4,7 +4,6 @@ import LayoutComponent from '../components/Layout';
 import { Link } from 'react-router-dom'; 
 import AboutUsModal from './AboutUsModal';
 import '../App.css';
-import { Link } from 'react-router-dom';
 import config from '../chatbot/config.js';
 import MessageParser from '../chatbot/MessageParser.js';
 import ActionProvider from '../chatbot/ActionProvider.js';
