@@ -10,6 +10,7 @@ import {
   ShopOutlined,
 } from '@ant-design/icons';
 import { Link } from 'react-router-dom';
+import {useNavigate} from 'react-router-dom';
 
 const { Content, Footer, Sider } = Layout;
 
@@ -28,7 +29,7 @@ const siderStyle = {
   boxShadow: '2px 0px 5px rgba(0, 0, 0, 0.1)',
   height: '100vh',
   position: 'fixed',
-  overflow: 'hidden', // This prevents scrolling in the sidebar
+  overflow: 'hidden', 
 };
 
 const menuItemStyle = {
@@ -70,53 +71,67 @@ export default function LayoutComponent({ children, role }) {
   const menuItemStyle = (key) => ({
     color: '#333',
     fontSize: '16px',
-    backgroundColor: hoveredMenuItem === key ? '#f0f0f0' : 'transparent', // Adjust the background color for hover effect
+    backgroundColor: hoveredMenuItem === key ? '#f0f0f0' : 'transparent', 
   });
 
-  // get role from local storage
   role = localStorage.getItem('role');
   console.log(role);
+
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    localStorage.clear();
+    navigate('/login');
+  };
 
   return (
     <Layout style={{ minHeight: '100vh' }}>
       <Sider style={{ background: '#D9E8F5', boxShadow: '2px 0px 5px rgba(0, 0, 0, 0.1)', height: '100vh', position: 'fixed', overflow: 'hidden' }} width={200}>
         <div className="logo" style={{ padding: '16px', textAlign: 'center' }}>
-          <img src={`${process.env.PUBLIC_URL}/images/logo.png`} alt="Logo" style={{ maxWidth: '70%', height: 'auto', margin: '0 auto 16px' }} />
+          <img 
+            src={`${process.env.PUBLIC_URL}/images/logo.png`} 
+            alt="Logo" 
+            style={{ maxWidth: '70%', height: 'auto', margin: '0 auto 16px' }} 
+          />
+          <p style={{ margin: '0', marginTop: '-15px', fontSize: '15px', fontWeight: 'bold' }}>Thyme and Budget</p>
         </div>
         <Menu mode="inline" style={{ background: 'none', borderRight: 'none' }} defaultSelectedKeys={['1']}>
           <Menu.Item key="1" icon={<HomeOutlined />} style={menuItemStyle('1')} onMouseEnter={() => handleMouseEnter('1')}>
-            <Link to={role === 'superuser' ? "/admin" : "/"}>Home</Link>
+            <Link to="/">Home</Link>
           </Menu.Item>
-
-          {role && role !== 'superuser' && (
+  
+          {role && (
             <>
-              <Menu.Item key="2" icon={<ShopOutlined />} style={menuItemStyle('2')} onMouseEnter={() => handleMouseEnter('2')}>
-                <Link to="/viewfooditems">View Food Items</Link>
+              {role !== 'superuser' && (
+                <Menu.Item key="2" icon={<ShopOutlined />} style={menuItemStyle('2')} onMouseEnter={() => handleMouseEnter('2')}>
+                  <Link to="/viewfooditems">View Food Items</Link>
+                </Menu.Item>
+              )}
+  
+              {role === 'donor' && (
+                <>
+                  <Menu.Item key="3" icon={<AppstoreOutlined />} style={menuItemStyle('3')} onMouseEnter={() => handleMouseEnter('3')}>
+                    <Link to="/myfooditems">My Food Items</Link>
+                  </Menu.Item>
+                  <Menu.Item key="4" icon={<PlusSquareOutlined />} style={menuItemStyle('4')} onMouseEnter={() => handleMouseEnter('4')}>
+                    <Link to="/newfooditem">New Food Item</Link>
+                  </Menu.Item>
+                </>
+              )}
+  
+              {role !== 'superuser' && (
+                <Menu.Item key="5" icon={<UserOutlined />} style={menuItemStyle('5')} onMouseEnter={() => handleMouseEnter('5')}>
+                  <Link to="/profile">Profile</Link>
+                </Menu.Item>
+              )}
+  
+              <Menu.Item key="logout" icon={<LogoutOutlined />} style={menuItemStyle} onClick={handleLogout}>
+                <Link to="/logout">Logout</Link>
               </Menu.Item>
-
             </>
           )}
-          {role === 'donor' && (
-            <>
-              <Menu.Item key="3" icon={<AppstoreOutlined />} style={menuItemStyle('3')} onMouseEnter={() => handleMouseEnter('3')}>
-                <Link to="/myfooditems">My Food Items</Link>
-              </Menu.Item>
-              <Menu.Item key="4" icon={<PlusSquareOutlined />} style={menuItemStyle('4')} onMouseEnter={() => handleMouseEnter('4')}>
-                <Link to="/newfooditem">New Food Item</Link>
-              </Menu.Item>
-            </>
-
-          )}
-          {role && role !== 'superuser' && (
-            <Menu.Item key="5" icon={<UserOutlined />} style={menuItemStyle('5')} onMouseEnter={() => handleMouseEnter('5')}>
-              <Link to="/profile">Profile</Link>
-            </Menu.Item>
-          )}
-          {role ? (
-            <Menu.Item key="logout" icon={<LogoutOutlined />} style={menuItemStyle}>
-              <Link to="/logout">Logout</Link>
-            </Menu.Item>
-          ) : (
+  
+          {!role && (
             <Menu.Item key="login" icon={<LoginOutlined />} style={menuItemStyle}>
               <Link to="/login">Login</Link>
             </Menu.Item>

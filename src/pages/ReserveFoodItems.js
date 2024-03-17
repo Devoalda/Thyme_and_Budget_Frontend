@@ -75,6 +75,7 @@ export default function ReserveFoodItems() {
                 console.log('Response:', response.data);
             }
             message.success('Food item reserved successfully');
+            navigate('/viewfooditems');
         } catch (error) {
             if (process.env.NODE_ENV === 'development') {
                 console.error('Error reserving food item:', error);
