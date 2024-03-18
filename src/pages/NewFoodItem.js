@@ -117,7 +117,7 @@ const NewFoodItem = () => {
     };
 
     return (
-        <LayoutComponent>
+        <LayoutComponent role={role}>
             <div style={styles.container}>
                 <Space direction="vertical" size="middle" style={styles.space}>
                     <Title level={2}>Add New Food Item</Title>

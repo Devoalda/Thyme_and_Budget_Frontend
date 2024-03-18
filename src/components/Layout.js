@@ -74,8 +74,8 @@ export default function LayoutComponent({ children, role }) {
     backgroundColor: hoveredMenuItem === key ? '#f0f0f0' : 'transparent', 
   });
 
-  role = localStorage.getItem('role');
-  console.log(role);
+  //role = localStorage.getItem('role');
+  console.log("ROLE:"+role);
 
   const navigate = useNavigate();
 
