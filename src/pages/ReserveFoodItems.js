@@ -29,7 +29,7 @@ const fetchFoodItemData = async (setFoodItem, setLoading, foodId, token) => {
 export default function ReserveFoodItems() {
     const [foodItem, setFoodItem] = useState(null);
     const [loading, setLoading] = useState(true);
-    //const [role, setRole] = useState(null);
+    const [role, setRole] = useState(null);
     const token = localStorage.getItem('token');
     const foodId = new URLSearchParams(window.location.search).get('id');
     const navigate = useNavigate();
