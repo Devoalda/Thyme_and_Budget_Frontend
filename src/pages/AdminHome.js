@@ -20,22 +20,22 @@ export default function AdminHome() {
     const [currentRecord, setCurrentRecord] = useState(null);
     const [reservedFoodItems, setReservedFoodItems] = useState([]);
     const [loadingReservedFoodItems, setLoadingReservedFoodItems] = useState(true);
-    const [role, setRole] = useState('');
-
-    useEffect(() => {
-        axios.get(`${process.env.REACT_APP_BACKEND_URL || 'http://localhost:8000'}/user/status/`, {
-            headers: {
-                Authorization: `Bearer ${localStorage.getItem('token')}`
-            }
-        })
-            .then(response => {
-                setRole(response.data.role);
-            })
-            .catch(error => {
-                console.error('Error getting user status:', error);
-                redirect('/login')
-            });
-    }, []);
+    // const [role, setRole] = useState('');
+    //
+    // useEffect(() => {
+    //     axios.get(`${process.env.REACT_APP_BACKEND_URL || 'http://localhost:8000'}/user/status/`, {
+    //         headers: {
+    //             Authorization: `Bearer ${localStorage.getItem('token')}`
+    //         }
+    //     })
+    //         .then(response => {
+    //             setRole(response.data.role);
+    //         })
+    //         .catch(error => {
+    //             console.error('Error getting user status:', error);
+    //             redirect('/login')
+    //         });
+    // }, []);
 
     useEffect(() => {
         fetchFoodData();
@@ -227,7 +227,7 @@ export default function AdminHome() {
     ];
 
     return (
-        <LayoutComponent role = {role}>
+        <LayoutComponent>
             <Title level={2} style={{ textAlign: 'center', margin: '16px 0' }}>Food Items</Title>
             <Search
                 placeholder="Search food items"
