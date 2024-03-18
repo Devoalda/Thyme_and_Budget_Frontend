@@ -66,9 +66,9 @@ const NewFoodItem = () => {
                     'Content-Type': 'multipart/form-data',
                 },
             });
-            const prediction = response.data.prediction;
+            const prediction = response.data.prediction.trim().toLowerCase();
             console.log("Prediction: " + prediction);
-            if (prediction.lower === 'food') {
+            if (prediction === 'food') {
                 const base64Image = await convertFileToBase64(file);
                 postFoodItem(values, base64Image);
             }
