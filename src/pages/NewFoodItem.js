@@ -61,7 +61,7 @@ const NewFoodItem = () => {
         formData.append('file', file);
 
         try {
-            const response = await axios.post(`${process.env.THYME_AND_BUDGET_RECOGNITION_URL || 'http://127.0.0.1:5000'}/classify-image`, formData, {
+            const response = await axios.post(`${process.env.REACT_APP_THYME_AND_BUDGET_RECOGNITION_URL || 'http://127.0.0.1:5000'}/classify-image`, formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
                 },
