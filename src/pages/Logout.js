@@ -16,6 +16,11 @@ const Logout = () => {
 
     const logout = async () => {
         const token = localStorage.getItem(TOKEN_KEY);
+        if (!token) {
+            // If the token is null, redirect to login
+            navigate('/login');
+            return;
+        }
         try {
             const response = await axios.post(`${process.env.REACT_APP_BACKEND_URL || 'http://localhost:8000'}/logout/`, {}, {
                 headers: {Authorization: `Bearer ${token}`}
