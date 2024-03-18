@@ -29,22 +29,7 @@ const Home = () => {
   };
 
   const [isChatOpen, setIsChatOpen] = useState(false);
-    // const [role, setRole] = useState('');
-    //
-    // useEffect(() => {
-    //     axios.get(`${process.env.REACT_APP_BACKEND_URL || 'http://localhost:8000'}/user/status/`, {
-    //         headers: {
-    //             Authorization: `Bearer ${localStorage.getItem('token')}`
-    //         }
-    //     })
-    //         .then(response => {
-    //             setRole(response.data.role);
-    //         })
-    //         .catch(error => {
-    //             console.error('Error getting user status:', error);
-    //             redirect('/login')
-    //         });
-    // }, []);
+
 
   return (
       <LayoutComponent>

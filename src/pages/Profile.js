@@ -35,25 +35,25 @@ const MyProfile = () => {
     const token = localStorage.getItem('token');
     const [role, setRole] = useState(null);
 
-    // useEffect(() => {
-    //     if (!token) {
-    //         navigate('/login');
-    //         return;
-    //     }
-    //     axios.get(`${process.env.REACT_APP_BACKEND_URL || 'http://localhost:8000'}/user/status/`, {
-    //         headers: {
-    //             Authorization: `Bearer ${token}`
-    //         }
-    //     })
-    //         .then(response => {
-    //             setRole(response.data.role);
-    //             fetchData();
-    //         })
-    //         .catch(error => {
-    //             console.error('Error getting user status:', error);
-    //             navigate('/login');
-    //         });
-    // }, [fetchData]);
+    useEffect(() => {
+        if (!token) {
+            navigate('/login');
+            return;
+        }
+        axios.get(`${process.env.REACT_APP_BACKEND_URL || 'http://localhost:8000'}/user/status/`, {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        })
+            .then(response => {
+                setRole(response.data.role);
+                fetchData();
+            })
+            .catch(error => {
+                console.error('Error getting user status:', error);
+                navigate('/login');
+            });
+    }, [fetchData]);
 
     useEffect(() => {
         fetchData()
