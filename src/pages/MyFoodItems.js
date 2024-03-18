@@ -29,31 +29,35 @@ const fetchFoodData = async (setFoodItems, setLoading, token) => {
 export default function MyFoodItems() {
     const [foodItems, setFoodItems] = useState([]);
     const [loading, setLoading] = useState(true);
-    const [role, setRole] = useState(null);
+    //const [role, setRole] = useState(null);
     const navigate = useNavigate();
 
     const token = localStorage.getItem('token');
 
+    // useEffect(() => {
+    //     if (!token) {
+    //         navigate('/login');
+    //         return;
+    //     }
+    //     axios.get(`${process.env.REACT_APP_BACKEND_URL || 'http://localhost:8000'}/user/status/`, {
+    //         headers: {
+    //             Authorization: `Bearer ${token}`
+    //         }
+    //     })
+    //         .then(statusResponse  => {
+    //             setRole(statusResponse.data.role);
+    //             fetchFoodData(setFoodItems, setLoading, token);
+    //             console.log(statusResponse.data.role);
+    //         })
+    //         .catch(statusError  => {
+    //             console.error('Error getting user status:', statusError);
+    //             navigate('/login');
+    //         });
+    // }, []);
+
     useEffect(() => {
-        if (!token) {
-            navigate('/login');
-            return;
-        }
-        axios.get(`${process.env.REACT_APP_BACKEND_URL || 'http://localhost:8000'}/user/status/`, {
-            headers: {
-                Authorization: `Bearer ${token}`
-            }
-        })
-            .then(statusResponse  => {
-                setRole(statusResponse.data.role);
-                fetchFoodData(setFoodItems, setLoading, token);
-                console.log(statusResponse.data.role);
-            })
-            .catch(statusError  => {
-                console.error('Error getting user status:', statusError);
-                navigate('/login');
-            });
-    }, []);
+        fetchFoodData(setFoodItems, setLoading, token);
+    }, [token]);
 
     return (
         <LayoutComponent>

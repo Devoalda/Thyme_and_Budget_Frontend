@@ -10,7 +10,6 @@ import MyProfile from './pages/Profile';
 import MyFoodItems from './pages/MyFoodItems';
 import NewFoodItem from './pages/NewFoodItem';
 import ReserveFoodItems from './pages/ReserveFoodItems';
-import ConfirmFoodCollection from './pages/ConfirmFoodCollection';
 import AdminHome from "./pages/AdminHome";
 import Home from './pages/Home';
 
@@ -23,7 +22,6 @@ function App() {
                 <Route path="/myfooditems" element={<MyFoodItems/>}/>
                 <Route path="/newfooditem" element={<NewFoodItem/>}/>
                 <Route path="/reservefooditems" element={<ReserveFoodItems/>}/>
-                <Route path="/confirmfoodcollection" element={<ConfirmFoodCollection/>}/>
                 <Route path="/profile" element={<MyProfile/>}/>
                 <Route path="/login" element={<Login/>}/>
                 <Route path="/logout" element={<Logout/>}/>    

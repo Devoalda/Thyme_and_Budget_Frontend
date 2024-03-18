@@ -29,31 +29,35 @@ const fetchFoodItemData = async (setFoodItem, setLoading, foodId, token) => {
 export default function ReserveFoodItems() {
     const [foodItem, setFoodItem] = useState(null);
     const [loading, setLoading] = useState(true);
-    const [role, setRole] = useState(null);
+    //const [role, setRole] = useState(null);
     const token = localStorage.getItem('token');
     const foodId = new URLSearchParams(window.location.search).get('id');
     const navigate = useNavigate();
     
     console.log(token);
+    // useEffect(() => {
+    //     if (!token) {
+    //         navigate('/login');
+    //         return;
+    //     }
+    //     axios.get(`${process.env.REACT_APP_BACKEND_URL || 'http://localhost:8000'}/user/status/`, {
+    //         headers: {
+    //             Authorization: `Bearer ${token}`
+    //         }
+    //     })
+    //         .then(statusResponse  => {
+    //             setRole(statusResponse.data.role);
+    //             fetchFoodItemData(setFoodItem, setLoading, foodId, token);
+    //             console.log(statusResponse.data.role);
+    //         })
+    //         .catch(statusError  => {
+    //             console.error('Error getting user status:', statusError);
+    //             navigate('/login');
+    //         });
+    // }, [foodId, token]);
+
     useEffect(() => {
-        if (!token) {
-            navigate('/login');
-            return;
-        }
-        axios.get(`${process.env.REACT_APP_BACKEND_URL || 'http://localhost:8000'}/user/status/`, {
-            headers: {
-                Authorization: `Bearer ${token}`
-            }
-        })
-            .then(statusResponse  => {
-                setRole(statusResponse.data.role);
-                fetchFoodItemData(setFoodItem, setLoading, foodId, token);
-                console.log(statusResponse.data.role);
-            })
-            .catch(statusError  => {
-                console.error('Error getting user status:', statusError);
-                navigate('/login');
-            });
+        fetchFoodItemData(setFoodItem, setLoading, foodId, token);
     }, [foodId, token]);
 
     const defaultImageUrl = "https://via.placeholder.com/150";
