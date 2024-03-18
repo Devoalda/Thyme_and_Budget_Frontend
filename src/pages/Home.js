@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import { Typography, Button, Row, Col, Modal, App } from 'antd';
 import LayoutComponent from '../components/Layout'; 
-import { Link } from 'react-router-dom'; 
+import {Link, redirect} from 'react-router-dom';
 import AboutUsModal from './AboutUsModal';
 import '../App.css';
 import config from '../chatbot/config.js';
@@ -9,6 +9,7 @@ import MessageParser from '../chatbot/MessageParser.js';
 import ActionProvider from '../chatbot/ActionProvider.js';
 import Chatbot from "react-chatbot-kit";
 import '../css/chat.css';
+import axios from "axios";
 
 const { Title, Paragraph } = Typography;
 
@@ -28,9 +29,25 @@ const Home = () => {
   };
 
   const [isChatOpen, setIsChatOpen] = useState(false);
+    const [role, setRole] = useState('');
+
+    useEffect(() => {
+        axios.get(`${process.env.REACT_APP_BACKEND_URL || 'http://localhost:8000'}/user/status/`, {
+            headers: {
+                Authorization: `Bearer ${localStorage.getItem('token')}`
+            }
+        })
+            .then(response => {
+                setRole(response.data.role);
+            })
+            .catch(error => {
+                console.error('Error getting user status:', error);
+                redirect('/login')
+            });
+    }, []);
 
   return (
-      <LayoutComponent>
+      <LayoutComponent role = {role}>
         <Title level={1} style={{marginTop: '40px', textAlign: 'center'}}>Fighting Food Hunger Together</Title>
         <Paragraph style={{fontSize: '18px', textAlign: 'center'}}>
           Join our mission to combat food hunger. Your food donations can make a
