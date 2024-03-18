@@ -30,7 +30,7 @@ const renderImage = (foodItem, defaultImageUrl) => (
 const renderTextFields = (foodItem) => (
     <Space direction="vertical" size="small">
         <Text strong>Expiry Date: {new Date(foodItem.expiry_date).toLocaleString()}</Text>
-        <Text strong>Location: {foodItem.location}</Text>
+        {/* <Text strong>Location: {foodItem.location}</Text> */}
         <Text strong>Quantity: {foodItem.quantity}</Text>
     </Space>
 );

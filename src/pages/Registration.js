@@ -1,5 +1,5 @@
-import React, {useState} from 'react';
-import {Button, Form, Input, message, Select, Space, Typography} from 'antd';
+import React, { useState } from 'react';
+import { Button, Form, Input, message, Select, Space, Typography, Row, Col } from 'antd';
 import axios from "axios";
 import {useNavigate} from 'react-router-dom';
 import config from '../chatbot/config.js';
@@ -10,6 +10,20 @@ import '../css/chat.css';
 
 const {Option} = Select;
 const {Title, Text} = Typography;
+
+const getGridFormField = (name, label, children, span = 12) => {
+    return (
+        <Col span={span}>
+            <Form.Item
+                name={name}
+                label={label}
+                rules={getValidationRules(name)}
+            >
+                {children}
+            </Form.Item>
+        </Col>
+    );
+};
 
 // Function to handle form validation rules
 const getValidationRules = (field) => {
@@ -66,7 +80,7 @@ const RegistrationForm = () => {
     // Check if user is already logged in
     const token = localStorage.getItem('token');
     if (token !== null) {
-        navigate('/home');
+        navigate('/');
     }
 
     const onFinish = async (values) => {
@@ -87,17 +101,6 @@ const RegistrationForm = () => {
                 role: values.role,
                 phone_number: values.phone_number,
             });
-
-            // // If role is 'donor', send postal_code to /location endpoint
-            // if (values.role === 'donor' && values.postal_code) {
-            //     const locationResponse = await axios.post(`${process.env.REACT_APP_BACKEND_URL || 'http://127.0.0.1:8000'}/location/`, {
-            //         username: values.username, postal_code: values.postal_code,
-            //     });
-
-            //     if (process.env.NODE_ENV === 'development') {
-            //         console.log(locationResponse);
-            //     }
-            // }
 
             message.success('Account created successfully! Redirecting to login page...');
             setTimeout(() => {
@@ -128,62 +131,59 @@ const RegistrationForm = () => {
 
     const [isChatOpen, setIsChatOpen] = useState(false);
 
-    return (<div style={{
-        width: '300px',
-        margin: 'auto',
-        padding: '20px',
-        backgroundColor: '#f8f9fa',
-        borderRadius: '10px',
-        boxShadow: '0 4px 8px 0 rgba(0,0,0,0.2)'
-    }}>
-        <Space direction="vertical" size="large" style={{width: '100%'}}>
-            <Title level={2} style={{textAlign: 'center', color: '#343a40'}}>Thyme and Budget</Title>
-            <Text style={{textAlign: 'center', color: '#6c757d'}}>Share food, save the planet</Text>
-            <Form
-                name="register"
-                onFinish={onFinish}
-                initialValues={{remember: true, role: 'receiver'}}
-                scrollToFirstError
-            >
-                <h1 style={{textAlign: 'center', color: '#333'}}>Registration</h1>
-
-                {getFormField("username", "Username", <Input/>)}
-                {getFormField("password", "Password", <Input.Password/>)}
-                {getFormField("confirm", "Confirm Password", <Input.Password/>)}
-                {getFormField("first_name", "First Name", <Input/>)}
-                {getFormField("last_name", "Last Name", <Input/>)}
-                {getFormField("email", "Email", <Input/>)}
-                {getFormField("role", "Role", <Select placeholder="Select a role"
-                                                      onChange={(value) => setRole(value)}>
-                    <Option value="donor">Donor</Option>
-                    <Option value="receiver">Receiver</Option>
-                </Select>)}
-                {getFormField("phone_number", "Phone Number", <Input/>)}
-                {/* {role === 'donor' && getFormField("postal_code", "Postal Code", <Input/>)} */}
-
+    return (
+        <div style={{
+            display: 'flex',
+            flexDirection: 'column',
+            justifyContent: 'center',
+            alignItems: 'center',
+            height: '100vh', 
+            margin: '0 auto', 
+            backgroundColor: '#E6F4EA',
+        }}>
+        <div style={{
+                width: '100%', 
+                maxWidth: '500px', 
+                padding: '20px',
+                backgroundColor: '#fff', 
+                borderRadius: '10px',
+                boxShadow: '0 4px 8px rgba(0,0,0,0.1)',
+                textAlign: 'center', 
+            }}>
+                {/* Logo and title here */}
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', flexDirection: 'row' }}>
+                    <img src={`${process.env.PUBLIC_URL}/images/logo.png`} alt="Logo" style={{ height: '100px', margin: '20px 0' }} />
+                    <h1>Thyme and Budget</h1>
+                </div>
+                <p style={{ margin: '10px 0 20px 0' }}>Share food, save the planet</p>
+                <Form
+                    name="register"
+                    onFinish={onFinish}
+                    initialValues={{ remember: true, role: 'receiver' }}
+                    scrollToFirstError
+                    style={{ margin: '20px 0' }}
+                >
+                <h1 style={{ textAlign: 'center', color: '#333', width: '100%' }}>Registration</h1>
+                <Row gutter={[16, 16]}>
+                    {getGridFormField("first_name", "First Name", <Input />, 12)}
+                    {getGridFormField("last_name", "Last Name", <Input />, 12)}
+                    {getGridFormField("username", "Username", <Input />, 12)}
+                    {getGridFormField("password", "Password", <Input.Password />, 12)}
+                    {getGridFormField("confirm", "Confirm Password", <Input.Password />, 12)}
+                    {getGridFormField("email", "Email", <Input />, 12)}
+                    {getGridFormField("role", "Role", (
+                        <Select placeholder="Select a role" onChange={(value) => setRole(value)}>
+                            <Option value="donor">Donor</Option>
+                            <Option value="receiver">Receiver</Option>
+                        </Select>
+                    ), 12)}
+                    {getGridFormField("phone_number", "Phone Number", <Input />, 12)}
+                </Row>
                 {getFormButton("primary", "submit", "Register")}
             </Form>
-            <Button type="primary" htmlType="button" style={{width: '100%'}}
-                    onClick={() => navigate('/login')}>
+            <Button type="primary" style={{ width: '100%' }} onClick={() => navigate('/login')}>
                 Login
-            </Button>
-        </Space>
-        <div className={`chat-container ${isChatOpen ? 'open' : ''}`}
-             onClick={() => !isChatOpen && setIsChatOpen(true)}>
-            {isChatOpen && (
-                <>
-                    <button className="close-button" onClick={(event) => {
-                        event.stopPropagation();
-                        setIsChatOpen(false);
-                    }}>X
-                    </button>
-                    <Chatbot
-                        config={config}
-                        messageParser={MessageParser}
-                        actionProvider={ActionProvider}
-                    />
-                </>
-            )}
+            </Button>   
         </div>
     </div>);
 };

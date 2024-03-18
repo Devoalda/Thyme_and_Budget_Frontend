@@ -8,9 +8,10 @@ class MessageParser {
     parse(message) {
         console.log(message)
 
-        if (message.includes("1")) {
-
-            return this.actionProvider.aboutThymeAndBudgetHandler();
+        if (message.toLowerCase().includes("help")) {
+            return this.actionProvider.handleHelp();
+        } else {
+            return this.actionProvider.defaultHandler();
         }
     }
 }

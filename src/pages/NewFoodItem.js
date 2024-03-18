@@ -10,15 +10,26 @@ const { Title, Text } = Typography;
 const NewFoodItem = () => {
     const navigate = useNavigate();
     const [fileList, setFileList] = useState([]);
+    const [role, setRole] = useState(null);
 
     useEffect(() => {
-        // Get token from local storage
         const token = localStorage.getItem('token');
 
-        // Check if token is present
         if (!token) {
-            // Redirect to login page if token is not present
             navigate('/login');
+        } else {
+            axios.get(`${process.env.REACT_APP_BACKEND_URL || 'http://localhost:8000'}/user/status/`, {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            })
+                .then(response => {
+                    setRole(response.data.role);
+                })
+                .catch(error => {
+                    console.error('Error getting user status:', error);
+                    navigate('/login')
+                });
         }
     }, [navigate]);
 
@@ -37,9 +48,36 @@ const NewFoodItem = () => {
             }
         });
         message.success('Food item created successfully!');
-            navigate('/home');
+            navigate('/viewfooditems');
         } catch (error) {
             message.error('Failed to create food item');
+            console.error(error);
+        }
+    };
+
+    const postImage = async (file, values) =>
+    {
+        const formData = new FormData();
+        formData.append('file', file);
+
+        try {
+            const response = await axios.post(`${process.env.THYME_AND_BUDGET_RECOGNITION_URL || 'http://127.0.0.1:5000'}/classify-image`, formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                },
+            });
+            const prediction = response.data.prediction;
+            console.log("Prediction: " + prediction);
+            if (prediction.lower === 'food') {
+                const base64Image = await convertFileToBase64(file);
+                postFoodItem(values, base64Image);
+            }
+            else
+            {
+                message.error('Image is not a food item');
+            }
+
+        } catch (error) {
             console.error(error);
         }
     };
@@ -65,7 +103,8 @@ const NewFoodItem = () => {
         const file = fileList[0].originFileObj;
         const base64Image = await convertFileToBase64(file);
         
-        postFoodItem(values, base64Image);
+        //postFoodItem(values, base64Image);
+        postImage(file, values);
     };
 
     const convertFileToBase64 = (file) => {

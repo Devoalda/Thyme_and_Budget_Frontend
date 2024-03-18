@@ -4,7 +4,6 @@ import axios from 'axios';
 import LayoutComponent from '../components/Layout';
 import { useNavigate } from 'react-router-dom';
 
-// Function to fetch reserved food items
 const fetchReservedFoodItems = async (setReservedFoodItems, setLoading, token) => {
     try {
         const response = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/collection/`, {
@@ -17,7 +16,6 @@ const fetchReservedFoodItems = async (setReservedFoodItems, setLoading, token) =
             const foodItemData = await fetchFoodItemData(item.food_item, token);
             return { ...item, foodItemData };
         }));
-        //log response
         console.log('Response:', response.data);
         setReservedFoodItems(foodItemsData);
     } catch (error) {
@@ -30,7 +28,6 @@ const fetchReservedFoodItems = async (setReservedFoodItems, setLoading, token) =
     }
 };
 
-// Function to fetch food item data
 const fetchFoodItemData = async (id, token) => {
     try {
         const response = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/food/${id}/`, {
@@ -50,8 +47,8 @@ const fetchFoodItemData = async (id, token) => {
 export default function ConfirmFoodCollection() {
     const [reservedFoodItems, setReservedFoodItems] = useState([]);
     const [loading, setLoading] = useState(true);
-    const [collectedItems, setCollectedItems] = useState([]); // New state variable
-    const [role, setRole] = useState('');
+    const [collectedItems, setCollectedItems] = useState([]); 
+    const [role, setRole] = useState(null);
     const token = localStorage.getItem('token');
     const navigate = useNavigate();
 
@@ -62,7 +59,7 @@ export default function ConfirmFoodCollection() {
                 phone_number: record.phone_number,
                 food_item: record.food_item,
             };
-            console.log('Request data:', requestData); // Log the request data
+            console.log('Request data:', requestData); 
 
             const response = await axios.put(`${process.env.REACT_APP_BACKEND_URL}/collection/${record.id}/`, requestData, {
                 headers: {
@@ -70,10 +67,10 @@ export default function ConfirmFoodCollection() {
                 },
             });
 
-            console.log('Response:', response); // Log the response
+            console.log('Response:', response); 
 
             message.success('Food item collected successfully');
-            setCollectedItems([...collectedItems, record.id]); // Add the collected item's id to the state
+            setCollectedItems([...collectedItems, record.id]); 
         } catch (error) {
             if (process.env.NODE_ENV === 'development') {
                 console.error('Error confirming collection:', error);
@@ -83,24 +80,23 @@ export default function ConfirmFoodCollection() {
     };
 
     useEffect(() => {
-        // Send get request to /user/status/ with the token
         axios.get(`${process.env.REACT_APP_BACKEND_URL || 'http://localhost:8000'}/user/status/`, {
             headers: {
                 Authorization: `Bearer ${token}`
             }
         })
             .then(statusResponse  => {
+                setRole(statusResponse.data.role);
+                fetchReservedFoodItems(setReservedFoodItems, setLoading, token);
                 console.log(statusResponse.data.role);
                 if (statusResponse.data.role !== 'superuser') {
-                    navigate('/home');
+                    navigate('/');
                 }
             })
             .catch(statusError  => {
-                // Handle error
                 console.error('Error getting user status:', statusError);
                 navigate('/login');
             });
-        fetchReservedFoodItems(setReservedFoodItems, setLoading, token);
     }, [token]);
 
     const columns = [
@@ -128,9 +124,9 @@ export default function ConfirmFoodCollection() {
             title: 'Action',
             key: 'action',
             render: (text, record) => (
-                collectedItems.includes(record.id) || record.quantity === 0 ? // Check if the item has been collected or quantity is 0
-                    <span style={{color: 'green'}}>Collected</span> : // If yes, show "Collected"
-                    <Button onClick={() => confirmCollection(record, token)}>Confirm Collection</Button> // If no, show the button
+                collectedItems.includes(record.id) || record.quantity === 0 ? 
+                    <span style={{color: 'green'}}>Collected</span> : 
+                    <Button onClick={() => confirmCollection(record, token)}>Confirm Collection</Button> 
             ),
         },
     ];
