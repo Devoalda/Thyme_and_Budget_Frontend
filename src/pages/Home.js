@@ -29,25 +29,25 @@ const Home = () => {
   };
 
   const [isChatOpen, setIsChatOpen] = useState(false);
-    const [role, setRole] = useState('');
-
-    useEffect(() => {
-        axios.get(`${process.env.REACT_APP_BACKEND_URL || 'http://localhost:8000'}/user/status/`, {
-            headers: {
-                Authorization: `Bearer ${localStorage.getItem('token')}`
-            }
-        })
-            .then(response => {
-                setRole(response.data.role);
-            })
-            .catch(error => {
-                console.error('Error getting user status:', error);
-                redirect('/login')
-            });
-    }, []);
+    // const [role, setRole] = useState('');
+    //
+    // useEffect(() => {
+    //     axios.get(`${process.env.REACT_APP_BACKEND_URL || 'http://localhost:8000'}/user/status/`, {
+    //         headers: {
+    //             Authorization: `Bearer ${localStorage.getItem('token')}`
+    //         }
+    //     })
+    //         .then(response => {
+    //             setRole(response.data.role);
+    //         })
+    //         .catch(error => {
+    //             console.error('Error getting user status:', error);
+    //             redirect('/login')
+    //         });
+    // }, []);
 
   return (
-      <LayoutComponent role = {role}>
+      <LayoutComponent>
         <Title level={1} style={{marginTop: '40px', textAlign: 'center'}}>Fighting Food Hunger Together</Title>
         <Paragraph style={{fontSize: '18px', textAlign: 'center'}}>
           Join our mission to combat food hunger. Your food donations can make a

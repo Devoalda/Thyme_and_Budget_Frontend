@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import { Layout, Menu } from 'antd';
 import {
   HomeOutlined,
@@ -9,8 +9,9 @@ import {
   LogoutOutlined,
   ShopOutlined,
 } from '@ant-design/icons';
-import { Link } from 'react-router-dom';
+import {Link, redirect} from 'react-router-dom';
 import {useNavigate} from 'react-router-dom';
+import axios from "axios";
 
 const { Content, Footer, Sider } = Layout;
 
@@ -62,9 +63,25 @@ const footerStyle = {
   padding: '12px 50px',
 };
 
-export default function LayoutComponent({ children, role }) {
+export default function LayoutComponent({ children}) {
 
   const [hoveredMenuItem, setHoveredMenuItem] = useState(null);
+  const [role, setRole] = useState('');
+
+  useEffect(() => {
+    axios.get(`${process.env.REACT_APP_BACKEND_URL || 'http://localhost:8000'}/user/status/`, {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem('token')}`
+      }
+    })
+        .then(response => {
+          setRole(response.data.role);
+        })
+        .catch(error => {
+          console.error('Error getting user status:', error);
+          redirect('/login')
+        });
+  }, []);
 
   const handleMouseEnter = (key) => setHoveredMenuItem(key);
 
