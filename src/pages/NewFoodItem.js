@@ -10,28 +10,6 @@ const { Title, Text } = Typography;
 const NewFoodItem = () => {
     const navigate = useNavigate();
     const [fileList, setFileList] = useState([]);
-    const [role, setRole] = useState(null);
-
-    useEffect(() => {
-        const token = localStorage.getItem('token');
-
-        if (!token) {
-            navigate('/login');
-        } else {
-            axios.get(`${process.env.REACT_APP_BACKEND_URL || 'http://localhost:8000'}/user/status/`, {
-                headers: {
-                    Authorization: `Bearer ${token}`
-                }
-            })
-                .then(response => {
-                    setRole(response.data.role);
-                })
-                .catch(error => {
-                    console.error('Error getting user status:', error);
-                    navigate('/login')
-                });
-        }
-    }, [navigate]);
 
     const postFoodItem = async (values, base64Image) => {
         const token = localStorage.getItem('token');
@@ -117,7 +95,7 @@ const NewFoodItem = () => {
     };
 
     return (
-        <LayoutComponent role={role}>
+        <LayoutComponent>
             <div style={styles.container}>
                 <Space direction="vertical" size="middle" style={styles.space}>
                     <Title level={2}>Add New Food Item</Title>

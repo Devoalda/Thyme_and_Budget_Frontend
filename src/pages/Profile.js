@@ -46,13 +46,17 @@ const MyProfile = () => {
             }
         })
             .then(response => {
-                setRole(response.data.role); 
+                setRole(response.data.role);
                 fetchData();
             })
             .catch(error => {
                 console.error('Error getting user status:', error);
                 navigate('/login');
             });
+    }, [fetchData]);
+
+    useEffect(() => {
+        fetchData()
     }, [fetchData]);
 
     const onFinish = async (values) => {

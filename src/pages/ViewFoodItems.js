@@ -19,28 +19,13 @@ export default function ViewFoodItems() {
     const [nextPageUrl, setNextPageUrl] = useState(null);
     const [totalPages, setTotalPages] = useState(0);
     const [sortOption, setSortOption] = useState('');
-    const [role, setRole] = useState(null);
 
     const token = localStorage.getItem('token');
 
+
+
     useEffect(() => {
-        if (!token) {
-            navigate('/login');
-            return;
-        }
-        axios.get(`${process.env.REACT_APP_BACKEND_URL || 'http://localhost:8000'}/user/status/`, {
-            headers: {
-                Authorization: `Bearer ${token}`
-            }
-        })
-            .then(statusResponse  => {
-                setRole(statusResponse.data.role);
-                fetchFoodData(setFood, setLoading, setNextPageUrl, setTotalPages, token);
-            })
-            .catch(statusError  => {
-                console.error('Error getting user status:', statusError);
-                navigate('/login');
-            });
+        fetchFoodData(setFood, setLoading, setNextPageUrl, setTotalPages, token, currentPage, searchTerm, sortOption);
     }, [token]);
 
     const handlePageChange = async page => {

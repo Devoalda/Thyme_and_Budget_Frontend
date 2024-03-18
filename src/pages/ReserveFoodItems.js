@@ -56,6 +56,10 @@ export default function ReserveFoodItems() {
             });
     }, [foodId, token]);
 
+    useEffect(() => {
+        fetchFoodItemData(setFoodItem, setLoading, foodId, token);
+    }, [foodId, token]);
+
     const defaultImageUrl = "https://via.placeholder.com/150";
 
     const onFinish = async (values) => {
