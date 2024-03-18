@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, { useState } from 'react';
 import { Layout, Menu } from 'antd';
 import {
   HomeOutlined,
@@ -11,7 +11,6 @@ import {
 } from '@ant-design/icons';
 import { Link } from 'react-router-dom';
 import {useNavigate} from 'react-router-dom';
-import axios from "axios";
 
 const { Content, Footer, Sider } = Layout;
 
@@ -66,24 +65,6 @@ const footerStyle = {
 export default function LayoutComponent({ children, role }) {
 
   const [hoveredMenuItem, setHoveredMenuItem] = useState(null);
-  const [role, setRole] = useState('');
-
-  useEffect(() => {
-    const token = localStorage.getItem('token');
-    if (token) {
-      axios.get(`${process.env.REACT_APP_BACKEND_URL || 'http://localhost:8000'}/user/status/`, {
-        headers: {
-          Authorization: `Bearer ${token}`
-        }
-      })
-          .then(response => {
-            setRole(response.data.role);
-          })
-          .catch(error => {
-            console.error('Error getting user status:', error);
-          });
-    }
-  }, []);
 
   const handleMouseEnter = (key) => setHoveredMenuItem(key);
 
@@ -93,7 +74,7 @@ export default function LayoutComponent({ children, role }) {
     backgroundColor: hoveredMenuItem === key ? '#f0f0f0' : 'transparent', 
   });
 
-  //role = localStorage.getItem('role');
+  role = localStorage.getItem('role');
   console.log(role);
 
   const navigate = useNavigate();
